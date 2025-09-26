@@ -1,16 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.nomadia;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
-/**
- *
- * @author graci
- */
 public abstract class Propiedad {
     private UUID id;
     private String ubicacion;
