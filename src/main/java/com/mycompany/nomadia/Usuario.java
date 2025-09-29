@@ -1,6 +1,7 @@
 package com.mycompany.nomadia;
 
 import java.util.UUID;
+import java.sql.*;
 
 public abstract class Usuario {
     private UUID id;
@@ -47,5 +48,7 @@ public abstract class Usuario {
         this.telefono = telefono;
     }
     
-    
+    public void mostrarDatos(){
+        String sql = "SELECT id, nombre, email, telefono FROM Usuario";
+    }
 }
