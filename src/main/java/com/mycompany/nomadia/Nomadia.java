@@ -1,26 +1,25 @@
 package com.mycompany.nomadia;
 
-import java.sql.Connection;     /*Representa la conexión a la base de datos*/
-import java.sql.DriverManager;  /*Gestiona los drivers JDBC y abre la conexión*/
-import java.sql.Statement;      /*Permite ejecutar sentencias SQL (CREATE, INSERT, UPDATE, DELETE)*/
-import java.sql.ResultSet;      /*Contiene los resultados de una consulta SELECT*/
-import java.sql.SQLException;
+import java.sql.*;
 
 public class Nomadia {
 
-    public static Connection connect() {
-        Connection conn = null;
-        try {
-            String url = "jdbc:sqlite:nomadia.db";
-            conn = DriverManager.getConnection(url);
-            System.out.println("Conectado con exito");
-        } catch (SQLException e) {
-            System.out.println("Error al conectar con la base de datos" + e.getMessage());
-        }
-        return conn;
-    }
-
     public static void main(String[] args) {
-        connect();
+        Connection conn = null;
+
+        try {
+            conn = DriverManager.getConnection("jdbc:sqlite:agenda.sqlite");
+            System.out.println("Conectado a la base de datos");
+            
+            /*Se hace PRAGMA foreign_keys = ON para que funcione correctamente el ON DELETE CASCADE*/
+            try (Statement st = conn.createStatement()) {
+                st.execute("PRAGMA foreign_keys = ON");
+            } catch (SQLException e){
+                System.out.println("Error: " + e.getMessage());
+            }
+            
+        } catch (SQLException e) {
+            System.out.println("Error al conectarse a la base de datos: " + e.getMessage());
+        }
     }
 }
