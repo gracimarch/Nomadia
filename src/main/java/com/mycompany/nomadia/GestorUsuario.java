@@ -5,7 +5,7 @@ import java.sql.*;
 public class GestorUsuario {
     
     public void agregarUsuario(Connection conn, Usuario usuario) {
-        String sql = "INSERT INTO Usuarios(id, nombre, email, telefono, tipo, descuento) VALUES(?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Usuarios(id, nombre, email, telefono, tipo) VALUES(?, ?, ?, ?, ?)";
 
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
             sentencia.setInt(1, usuario.getId());
@@ -55,6 +55,44 @@ public class GestorUsuario {
 
         } catch (SQLException e) {
             System.out.println("Error al actualizar tipo de usuario: " + e.getMessage());
+        }
+    }
+
+    public void actualizarEmail(Connection conn, int id, String nuevoEmail) {
+        String sql = "UPDATE Usuarios SET email = ? WHERE id = ?";
+
+        try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
+            sentencia.setString(1, nuevoEmail);
+            sentencia.setInt(2, id);
+
+            int registrosModificados = sentencia.executeUpdate();
+
+            if (registrosModificados == 1) {
+                System.out.println("Email actualizado correctamente");
+            } else {
+                System.out.println("No se encontró el usuario con el ID proporcionado");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al actualizar email: " + e.getMessage());
+        }
+    }
+
+    public void actualizarTelefono(Connection conn, int id, String nuevoTelefono) {
+        String sql = "UPDATE Usuarios SET telefono = ? WHERE id = ?";
+
+        try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
+            sentencia.setString(1, nuevoTelefono);
+            sentencia.setInt(2, id);
+
+            int registrosModificados = sentencia.executeUpdate();
+
+            if (registrosModificados == 1) {
+                System.out.println("Teléfono actualizado correctamente");
+            } else {
+                System.out.println("No se encontró el usuario con el ID proporcionado");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al actualizar teléfono: " + e.getMessage());
         }
     }
 
