@@ -1,19 +1,14 @@
 package com.mycompany.nomadia;
 
 public class InquilinoPremium extends Inquilino {
-    private double descuento;
+    private static final double DESCUENTO = 0.2;
     
-    public InquilinoPremium(String nombre, String email, String telefono, double descuento) {
+    public InquilinoPremium(String nombre, String email, String telefono) {
         super(nombre, email, telefono);
         setTipo("InquilinoPremium");
-        this.descuento = descuento;
     }
 
     public double getDescuento() {
-        return descuento;
-    }
-
-    public void setDescuento(double descuento) {
-        this.descuento = descuento;
+        return DESCUENTO;
     }
 }
