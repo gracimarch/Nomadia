@@ -5,17 +5,28 @@ import java.sql.*;
 public class GestorUsuario {
     
     public void agregarUsuario(Connection conn, Usuario usuario) {
-        String sql = "INSERT INTO Usuarios(id, nombre, email, telefono, tipo) VALUES(?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Usuarios(nombre, email, telefono, tipo) VALUES(?, ?, ?, ?)";
 
-        try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
-            sentencia.setInt(1, usuario.getId());
-            sentencia.setString(2, usuario.getNombre());
-            sentencia.setString(3, usuario.getEmail());
-            sentencia.setString(4, usuario.getTelefono());
-            sentencia.setString(5, usuario.getTipo());
+        try (PreparedStatement sentencia = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            sentencia.setString(1, usuario.getNombre());
+            sentencia.setString(2, usuario.getEmail());
+            sentencia.setString(3, usuario.getTelefono());
+            sentencia.setString(4, usuario.getTipo());
 
-            sentencia.executeUpdate();
-            System.out.println("Usuario agregado correctamente");
+            int filas = sentencia.executeUpdate();
+
+            if (filas > 0) {
+                try (ResultSet ids = sentencia.getGeneratedKeys()) {
+                    if (ids.next()) {
+                        int idGenerado = ids.getInt(1);
+                        System.out.println("Usuario agregado correctamente. ID: " + idGenerado);
+                    } else {
+                        System.out.println("Usuario agregado correctamente. No se obtuvo ID generado.");
+                    }
+                }
+            } else {
+                System.out.println("No se pudo agregar el usuario.");
+            }
         } catch (SQLException e) {
             System.out.println("Error al agregar usuario: " + e.getMessage());
         }
@@ -145,7 +156,7 @@ public class GestorUsuario {
 
     public void imprimirDatos(ResultSet rs) {
         try {
-            System.out.println("=========== Usuario " + rs.getInt("id") + " ===========");
+            System.out.println("\n=========== Usuario " + rs.getInt("id") + " ===========");
             System.out.println("Nombre: " + rs.getString("nombre"));
             System.out.println("Email: " + rs.getString("email"));
             System.out.println("Teléfono: " + rs.getString("telefono"));
