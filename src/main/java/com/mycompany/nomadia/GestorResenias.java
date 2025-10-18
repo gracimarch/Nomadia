@@ -4,13 +4,12 @@ import java.sql.*;
 
 public class GestorResenias {
     public void agregarResenia(Connection conn, Resenia resenia) {
-        String sql = "INSERT INTO Resenias (id, propiedadId, inquilinoId, comentario, puntaje) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Resenias (propiedadId, inquilinoId, comentario, puntaje) VALUES (?, ?, ?, ?)";
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
-            sentencia.setInt(1, resenia.getId());
-            sentencia.setInt(2, resenia.getPropiedadId());
-            sentencia.setInt(3, resenia.getInquilinoId());
-            sentencia.setString(4, resenia.getComentario());
-            sentencia.setInt(5, resenia.getPuntaje());
+            sentencia.setInt(1, resenia.getPropiedadId());
+            sentencia.setInt(2, resenia.getInquilinoId());
+            sentencia.setString(3, resenia.getComentario());
+            sentencia.setInt(4, resenia.getPuntaje());
             sentencia.executeUpdate();
             System.out.println("Reseña agregada correctamente.");
         } catch (SQLException e) {
@@ -18,12 +17,12 @@ public class GestorResenias {
         }
     }
 
-    public void actualizarResenia(Connection conn, Resenia resenia) {
+    public void actualizarResenia(Connection conn, Resenia resenia, int id) {
         String sql = "UPDATE Resenias SET comentario = ?, puntaje = ? WHERE id = ?";
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
             sentencia.setString(1, resenia.getComentario());
             sentencia.setInt(2, resenia.getPuntaje());
-            sentencia.setInt(3, resenia.getId());
+            sentencia.setInt(3, id);
             sentencia.executeUpdate();
             System.out.println("Reseña actualizada correctamente.");
         } catch (SQLException e) {

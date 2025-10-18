@@ -5,9 +5,8 @@ import java.sql.*;
 public class GestorReserva {
 
     public void agregarReserva(Connection conn, Reserva reserva) {
-        String sql = "INSERT INTO Reservas (id, propiedadId, inquilinoId, fechaInicio, fechaFin, precioFinal, cantidadPersonas, pagado) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Reservas (propiedadId, inquilinoId, fechaInicio, fechaFin, precioFinal, cantidadPersonas, pagado) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
-            sentencia.setInt(1, reserva.getId());
             sentencia.setInt(2, reserva.getPropiedadId());
             sentencia.setInt(3, reserva.getInquilinoId());
             sentencia.setDate(4, new java.sql.Date(reserva.getFechaInicio().getTime()));
@@ -22,34 +21,18 @@ public class GestorReserva {
         }
     }
 
-    public void actualizarReserva(Connection conn, Reserva reserva) {
-        String sql = "UPDATE Reservas SET fechaInicio = ?, fechaFin = ?, precioFinal = ?, cantidadPersonas = ?, pagado = ? WHERE id = ?";
+    public void actualizarReserva(Connection conn, Reserva reserva, int id) {
+        String sql = "UPDATE Reservas SET fechaInicio = ?, fechaFin = ?, precioFinal = ?, cantidadPersonas = ? WHERE id = ?";
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
             sentencia.setDate(1, new java.sql.Date(reserva.getFechaInicio().getTime()));
             sentencia.setDate(2, new java.sql.Date(reserva.getFechaFin().getTime()));
             sentencia.setDouble(3, reserva.getPrecioFinal());
             sentencia.setInt(4, reserva.getCantidadPersonas());
-            sentencia.setBoolean(5, reserva.isPagado());
-            sentencia.setInt(6, reserva.getId());
+            sentencia.setInt(5, id);
             sentencia.executeUpdate();
             System.out.println("Reserva actualizada correctamente.");
         } catch (SQLException e) {
             System.out.println("Error al actualizar reserva: " + e.getMessage());
-        }
-    }
-
-    public void eliminarReserva(Connection conn, int id) {
-        String sql = "DELETE FROM Reservas WHERE id = ?";
-        try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
-            sentencia.setInt(1, id);
-            int filasAfectadas = sentencia.executeUpdate();
-            if (filasAfectadas > 0) {
-                System.out.println("Reserva eliminada correctamente.");
-            } else {
-                System.out.println("No se encontró la reserva con el ID proporcionado.");
-            }
-        } catch (SQLException e) {
-            System.out.println("Error al eliminar reserva: " + e.getMessage());
         }
     }
 
@@ -65,6 +48,21 @@ public class GestorReserva {
             }
         } catch (SQLException e) {
             System.out.println("Error al marcar reserva como pagada: " + e.getMessage());
+        }
+    }
+
+    public void eliminarReserva(Connection conn, int id) {
+        String sql = "DELETE FROM Reservas WHERE id = ?";
+        try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
+            sentencia.setInt(1, id);
+            int filasAfectadas = sentencia.executeUpdate();
+            if (filasAfectadas > 0) {
+                System.out.println("Reserva eliminada correctamente.");
+            } else {
+                System.out.println("No se encontró la reserva con el ID proporcionado.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al eliminar reserva: " + e.getMessage());
         }
     }
 
