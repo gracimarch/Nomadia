@@ -1,12 +1,8 @@
 package com.mycompany.nomadia;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 public abstract class Propiedad {
-    private static final Set<Integer> idsExistentes = new HashSet<>();
-    private int id;
     private int anfitrionId;
     private String tipo;
     private String ubicacion;
@@ -19,7 +15,6 @@ public abstract class Propiedad {
     private ArrayList<Resenia> calificaciones;
 
     public Propiedad(int anfitrionId, String tipo, String ubicacion, double precioNoche, int habitaciones, int banios, int maxPersonas, boolean parking, boolean petFriendly) {
-        setId(generarIdUnico());
         this.anfitrionId = anfitrionId;
         this.tipo = tipo;
         this.ubicacion = ubicacion;
@@ -30,36 +25,6 @@ public abstract class Propiedad {
         this.parking = parking;
         this.petFriendly = petFriendly;
         calificaciones = new ArrayList<>();
-    }
-
-    private int generarIdUnico() {
-        int nuevoId = 1;
-        while (idsExistentes.contains(nuevoId)) {
-            nuevoId++;
-        }
-        return nuevoId;
-    }
-
-    public int getId() {
-        return id;
-    }
-    
-    public void setId(int nuevoId) {
-        boolean idAsignado = false;
-        while (!idAsignado) {
-            try {
-                if (!idsExistentes.contains(nuevoId)) {
-                    idsExistentes.remove(this.id);
-                    this.id = nuevoId;
-                    idsExistentes.add(nuevoId);
-                    idAsignado = true;
-                } else {
-                    throw new IllegalArgumentException("El ID ya existe en memoria.");
-                }
-            } catch (Exception e) {
-                nuevoId = generarIdUnico();
-            }
-        }
     }
     
     public int getAnfitrionId() {
