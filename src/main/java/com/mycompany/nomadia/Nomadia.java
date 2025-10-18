@@ -5,6 +5,18 @@ import java.util.Scanner;
 
 public class Nomadia {
 
+    private static int leerInt(Scanner sc, String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String line = sc.nextLine();
+            try {
+                return Integer.parseInt(line.trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Entrada inválida. Ingrese un número.");
+            }
+        }
+    }
+
     public static void main(String[] args) {
         try {
             Connection conn = DriverManager.getConnection("jdbc:sqlite:nomadia.db");
@@ -34,8 +46,7 @@ public class Nomadia {
                 System.out.println("3. Gestionar Reservas");
                 System.out.println("4. Gestionar Reseñas");
                 System.out.println("5. Salir");
-                System.out.print("Seleccione una opción: ");
-                opc1 = read.nextInt();
+                opc1 = leerInt(read, "Seleccione una opción: ");
 
                 switch (opc1) {
 
@@ -47,8 +58,7 @@ public class Nomadia {
                             System.out.println("3. Eliminar Usuario");
                             System.out.println("4. Mostrar Usuarios");
                             System.out.println("5. Volver");
-                            System.out.print("Seleccione una opción: ");
-                            opc2 = read.nextInt();
+                            opc2 = leerInt(read, "Seleccione una opción: ");
 
                             switch (opc2) {
                                 case 1:
@@ -61,12 +71,11 @@ public class Nomadia {
                                         System.out.println("1. Agregar Inquilino");
                                         System.out.println("2. Agregar Anfitrión");
                                         System.out.println("3. Volver");
-                                        System.out.print("Seleccione una opción: ");
-                                        opc3 = read.nextInt();
+                                        opc3 = leerInt(read, "Seleccione una opción: ");
 
                                         switch (opc3) {
                                             case 1:
-                                                System.out.println("Ingrese el nombre y apellido");
+                                                System.out.println("\nIngrese el nombre y apellido");
                                                 nombre = read.nextLine();
                                                 System.out.println("Ingrese el email");
                                                 email = read.nextLine();
@@ -78,7 +87,7 @@ public class Nomadia {
                                                 break;
 
                                             case 2:
-                                                System.out.println("Ingrese el nombre y apellido");
+                                                System.out.println("\nIngrese el nombre y apellido");
                                                 nombre = read.nextLine();
                                                 System.out.println("Ingrese el email");
                                                 email = read.nextLine();
@@ -90,38 +99,40 @@ public class Nomadia {
                                                 break;
 
                                             case 3:
-                                                System.out.println("Volviendo a gestionar usuarios...");
+                                                System.out.println("\nVolviendo a gestionar usuarios...");
                                                 break;
 
                                             default:
-                                                System.out.println("Opción no válida. Intente de nuevo.");
+                                                System.out.println("\nOpción no válida. Intente de nuevo.");
                                         }
                                     } while (opc3 != 3);
                                     break;
 
                                 case 2:
-                                    do {
-                                        int id;
-                                        System.out.println("\nIngrese el ID del usuario que desea modificar");
-                                        id = read.nextInt();
+                                    int id = leerInt(read, "\nIngrese el ID del usuario que desea modificar: ");
 
-                                        System.out.println("\n¿Qué desea actualizar?");
+                                    System.out.println("\nDatos actuales del usuario:");
+                                    gestorUsuario.mostrarUsuarioPorId(conn, id);
+
+                                    do {
+                                        System.out.println("\n¿Qué desea actualizar ?");
                                         System.out.println("1. Actualizar email");
                                         System.out.println("2. Actualizar teléfono");
                                         System.out.println("3. Ascender Inquilino a Inquilino Premium");
                                         System.out.println("4. Volver");
-                                        System.out.print("Seleccione una opción: ");
-                                        opc3 = read.nextInt();
+                                        opc3 = leerInt(read, "Seleccione una opción: ");
 
                                         switch (opc3) {
                                             case 1:
-                                                System.out.println("Ingrese el email actualizado");
-                                                gestorUsuario.actualizarEmail(conn, id, read.nextLine());
+                                                System.out.println("\nIngrese el email actualizado");
+                                                String emailActualizado = read.nextLine();
+                                                gestorUsuario.actualizarEmail(conn, id, emailActualizado);
                                                 break;
 
                                             case 2:
-                                                System.out.println("Ingrese el teléfono actualizado");
-                                                gestorUsuario.actualizarTelefono(conn, id, read.nextLine());
+                                                System.out.println("\nIngrese el teléfono actualizado");
+                                                String telefonoActualizado = read.nextLine();
+                                                gestorUsuario.actualizarTelefono(conn, id, telefonoActualizado);
                                                 break;
 
                                             case 3:
@@ -129,67 +140,64 @@ public class Nomadia {
                                                 break;
 
                                             case 4:
-                                                System.out.println("Volviendo a gestionar usuarios...");
+                                                System.out.println("\nVolviendo a gestionar usuarios...");
                                                 break;
 
                                             default:
-                                                System.out.println("Opción no válida. Intente de nuevo.");
+                                                System.out.println("\nOpción no válida. Intente de nuevo.");
                                         }
                                     } while (opc3 != 4);
                                     break;
 
                                 case 3:
-                                    System.out.println("\nIngrese el ID del usuario que desea eliminar");
-                                    gestorUsuario.eliminarUsuario(conn, read.nextInt());
+                                    int idEliminar = leerInt(read, "\nIngrese el ID del usuario que desea eliminar: ");
+                                    gestorUsuario.eliminarUsuario(conn, idEliminar);
                                     break;
 
                                 case 4:
-                                    switch (opc2) {
-                                        case 1:
-                                            do {
-                                                System.out.println("\n¿Qué desea mostrar?");
-                                                System.out.println("1. Mostrar Usuarios");
-                                                System.out.println("2. Mostrar Inquilinos");
-                                                System.out.println("3. Mostrar Anfitriones");
-                                                System.out.println("4. Mostrar por ID");
-                                                System.out.println("5. Volver");
-                                                System.out.print("Seleccione una opción: ");
-                                                opc3 = read.nextInt();
+                                    do {
+                                        System.out.println("\n¿Qué desea mostrar?");
+                                        System.out.println("1. Mostrar Usuarios");
+                                        System.out.println("2. Mostrar Inquilinos");
+                                        System.out.println("3. Mostrar Anfitriones");
+                                        System.out.println("4. Mostrar por ID");
+                                        System.out.println("5. Volver");
+                                        opc3 = leerInt(read, "Seleccione una opción: ");
 
-                                                switch (opc3) {
-                                                    case 1:
-                                                        gestorUsuario.mostrarUsuarios(conn);
-                                                        break;
+                                        switch (opc3) {
+                                            case 1:
+                                                gestorUsuario.mostrarUsuarios(conn);
+                                                break;
 
-                                                    case 2:
-                                                        gestorUsuario.mostrarUsuariosPorTipo(conn, "Inquilino");
-                                                        break;
+                                            case 2:
+                                                gestorUsuario.mostrarUsuariosPorTipo(conn, "Inquilino");
+                                                break;
 
-                                                    case 3:
-                                                        gestorUsuario.mostrarUsuariosPorTipo(conn, "Anfitrion");
-                                                        break;
+                                            case 3:
+                                                gestorUsuario.mostrarUsuariosPorTipo(conn, "Anfitrion");
+                                                break;
 
-                                                    case 4:
-                                                        System.out.print("Ingrese el ID del usuario que desea mostrar: ");
-                                                        gestorUsuario.mostrarUsuarioPorId(conn, read.nextInt());
-                                                        break;
+                                            case 4:
+                                                int idMostrar = leerInt(read, "\nIngrese el ID del usuario que desea mostrar: ");
+                                                gestorUsuario.mostrarUsuarioPorId(conn, idMostrar);
+                                                break;
 
-                                                    case 5:
-                                                        System.out.println("Volviendo a gestionar usuarios...");
-                                                        break;
+                                            case 5:
+                                                System.out.println("\nVolviendo a gestionar usuarios...");
+                                                break;
 
-                                                    default:
-                                                        System.out.println("Opción no válida. Intente de nuevo.");
-                                                }
-                                            } while (opc3 != 5);
-                                            break;
-                                    }
+                                            default:
+                                                System.out.println("\nOpción no válida. Intente de nuevo.");
+                                        }
+                                    } while (opc3 != 5);
+                                    break;
+
                                 case 5:
-                                    System.out.println("Volviendo a menú principal...");
+                                    System.out.println("\nVolviendo a menú principal...");
                                     break;
 
                                 default:
-                                    System.out.println("Opción no válida. Intente de nuevo.");
+                                    System.out.println("\nOpción no válida. Intente de nuevo.");
                             }
                         } while (opc2 != 5);
 
@@ -204,10 +212,10 @@ public class Nomadia {
                         // Lógica para gestionar reseñas
                         break;
                     case 5:
-                        System.out.println("Saliendo del programa...");
+                        System.out.println("\nSaliendo del programa...");
                         break;
                     default:
-                        System.out.println("Opción no válida. Intente de nuevo.");
+                        System.out.println("\nOpción no válida. Intente de nuevo.");
                 }
             } while (opc1 != 5);
 
