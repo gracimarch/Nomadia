@@ -116,7 +116,8 @@ public class GestorPropiedad {
         }
     }
 
-    public void actualizarPrecioNoche(Connection conn, int id, double nuevoPrecio) {
+    
+    public void actualizarPropiedad(Connection conn, int id, double nuevoPrecio) {
         String sql = "UPDATE Propiedades SET precioNoche = ? WHERE id = ?";
 
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
@@ -133,6 +134,39 @@ public class GestorPropiedad {
 
         } catch (SQLException e) {
             System.out.println("Error al actualizar precio por noche: " + e.getMessage());
+        }
+    }
+
+    public void actualizarPropiedad(Connection conn, int id, String dato){
+        String selectSql = "SELECT ? FROM Propiedades WHERE id = ?";
+        try (PreparedStatement psSelect = conn.prepareStatement(selectSql)) {
+            psSelect.setString(1, dato);
+            psSelect.setInt(2, id);
+            try (ResultSet rs = psSelect.executeQuery()) {
+                if (!rs.next()) {
+                    System.out.println("No se encontró la propiedad con el ID proporcionado");
+                    return;
+                }
+
+                boolean actual = rs.getBoolean(dato);
+                if (rs.wasNull()) actual = false;
+                boolean nuevo = !actual;
+
+                String updateSql = "UPDATE Propiedades SET ? = ? WHERE id = ?";
+                try (PreparedStatement psUpdate = conn.prepareStatement(updateSql)) {
+                    psUpdate.setString(1, dato);
+                    psUpdate.setBoolean(2, nuevo);
+                    psUpdate.setInt(3, id);
+                    int filas = psUpdate.executeUpdate();
+                    if (filas == 1) {
+                        System.out.println("Dato actualizado correctamente");
+                    } else {
+                        System.out.println("No se pudo actualizar la propiedad.");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al actualizar propiedad: " + e.getMessage());
         }
     }
 
@@ -253,10 +287,11 @@ public class GestorPropiedad {
         }
     }
 
-    public void mostrarPropiedadesConParking(Connection conn) {
-        String sql = "SELECT * FROM Propiedades WHERE parking = 1";
+    public void mostrarPropiedadesPetFriendly(Connection conn, String dato) {
+        String sql = "SELECT * FROM Propiedades WHERE ? = 1";
 
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
+            sentencia.setString(1, dato);
             ResultSet rs = sentencia.executeQuery();
 
             boolean existe = false;
@@ -265,33 +300,14 @@ public class GestorPropiedad {
                 imprimirDatos(rs);
             }
             if (!existe) {
-                System.out.println("No se encontraron propiedades con parking disponible");
-                }
-        } catch (SQLException e) {
-            System.out.println("Error al buscar propiedades: " + e.getMessage());   
-        }
-    }
-
-    public void mostrarPropiedadesPetFriendly(Connection conn) {
-        String sql = "SELECT * FROM Propiedades WHERE petFriendly = 1";
-
-        try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
-            ResultSet rs = sentencia.executeQuery();
-
-            boolean existe = false;
-            while (rs.next()) {
-                existe = true;
-                imprimirDatos(rs);
-            }
-            if (!existe) {
-                System.out.println("No se encontraron propiedades pet friendly");
+                System.out.println("No se encontraron propiedades con lo requerido");
             }
         } catch (SQLException e) {
             System.out.println("Error al buscar propiedades: " + e.getMessage());   
         }
     }
 
-    public void imprimirDatos (ResultSet rs) {
+    public void imprimirDatos(ResultSet rs) {
         try {
             System.out.println("========== Propiedad " + rs.getInt("id") + " ==========");
             System.out.println("ID: " + rs.getInt("id"));
@@ -301,7 +317,7 @@ public class GestorPropiedad {
             System.out.println("Anfitrión ID: " + rs.getInt("anfitrionId"));
             System.out.println("Máx. Personas: " + rs.getInt("maxPersonas"));
 
-            // Campos opcionales
+            /*Campos opcionales*/
             int habitaciones = rs.getInt("habitaciones");
             if (!rs.wasNull()) System.out.println("Habitaciones: " + habitaciones);
 
