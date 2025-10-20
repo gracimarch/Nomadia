@@ -17,12 +17,8 @@ public class GestorUsuario {
 
             if (filas > 0) {
                 try (ResultSet ids = sentencia.getGeneratedKeys()) {
-                    if (ids.next()) {
-                        int idGenerado = ids.getInt(1);
-                        System.out.println("Usuario agregado correctamente. ID: " + idGenerado);
-                    } else {
-                        System.out.println("Usuario agregado correctamente. No se obtuvo ID generado.");
-                    }
+                    int idGenerado = ids.getInt(1);
+                    System.out.println("Usuario agregado correctamente. ID: " + idGenerado);
                 }
             } else {
                 System.out.println("No se pudo agregar el usuario.");
@@ -50,11 +46,21 @@ public class GestorUsuario {
     }
 
     public void actualizarTipoUsuario(Connection conn, int id, String nuevoTipo) {
-        String sql = "UPDATE Usuarios SET tipo = ? WHERE id = ?";
+        // actualiza tipo y el campo descuento según el tipo
+        String sql = "UPDATE Usuarios SET tipo = ?, descuento = ? WHERE id = ?";
 
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
             sentencia.setString(1, nuevoTipo);
-            sentencia.setInt(2, id);
+
+            if ("InquilinoPremium".equals(nuevoTipo)) {
+                // poner el descuento (ej. 0.2) al ascender
+                sentencia.setDouble(2, 0.2);
+            } else {
+                // dejar NULL cuando no es premium
+                sentencia.setNull(2, Types.DOUBLE);
+            }
+
+            sentencia.setInt(3, id);
 
             int registrosModificados = sentencia.executeUpdate();
 
@@ -169,6 +175,33 @@ public class GestorUsuario {
             System.out.println("=================================");
         } catch (SQLException e) {
             System.out.println("Error al imprimir datos del usuario: " + e.getMessage());
+        }
+    }
+
+    public boolean existeUsuario(Connection conn, int id) {
+        String sql = "SELECT 1 FROM Usuarios WHERE id = ?";
+        try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
+            sentencia.setInt(1, id);
+            try (ResultSet rs = sentencia.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al verificar existencia del usuario: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean esTipoUsuario(Connection conn, int id, String tipo) {
+        String sql = "SELECT 1 FROM Usuarios WHERE id = ? AND tipo = ?";
+        try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
+            sentencia.setInt(1, id);
+            sentencia.setString(2, tipo);
+            try (ResultSet rs = sentencia.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al verificar tipo de usuario: " + e.getMessage());
+            return false;
         }
     }
 
