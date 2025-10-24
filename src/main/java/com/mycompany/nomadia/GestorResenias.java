@@ -3,7 +3,13 @@ package com.mycompany.nomadia;
 import java.sql.*;
 
 public class GestorResenias {
-    public void agregarResenia(Connection conn, Resenia resenia) {
+    private Connection conn;
+
+    public GestorResenias() {
+        this.conn = conn;
+    }
+
+    public void agregarResenia(Resenia resenia) {
         String sql = "INSERT INTO Resenias (propiedadId, inquilinoId, comentario, puntaje) VALUES (?, ?, ?, ?)";
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
             sentencia.setInt(1, resenia.getPropiedadId());
@@ -17,7 +23,7 @@ public class GestorResenias {
         }
     }
 
-    public void actualizarResenia(Connection conn, Resenia resenia, int id) {
+    public void actualizarResenia(Resenia resenia, int id) {
         String sql = "UPDATE Resenias SET comentario = ?, puntaje = ? WHERE id = ?";
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
             sentencia.setString(1, resenia.getComentario());
@@ -30,7 +36,7 @@ public class GestorResenias {
         }
     }
 
-    public void eliminarResenia(Connection conn, int id) {
+    public void eliminarResenia(int id) {
         String sql = "DELETE FROM Resenias WHERE id = ?";
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
             sentencia.setInt(1, id);
@@ -41,7 +47,7 @@ public class GestorResenias {
         }
     }
 
-    public void mostrarResenias(Connection conn) {
+    public void mostrarResenias() {
         String sql = "SELECT * FROM Resenias";
         try (Statement sentencia = conn.createStatement();
              ResultSet rs = sentencia.executeQuery(sql)) {
@@ -53,7 +59,7 @@ public class GestorResenias {
         }
     }
 
-    public void mostrarReseniasPorPropiedad(Connection conn, int propiedadId) {
+    public void mostrarReseniasPorPropiedad(int propiedadId) {
         String sql = "SELECT * FROM Resenias WHERE propiedadId = ?";
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
             sentencia.setInt(1, propiedadId);
@@ -67,7 +73,7 @@ public class GestorResenias {
         }
     }
 
-    public void mostrarReseniasPorInquilino(Connection conn, int inquilinoId) {
+    public void mostrarReseniasPorInquilino(int inquilinoId) {
         String sql = "SELECT * FROM Resenias WHERE inquilinoId = ?";
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
             sentencia.setInt(1, inquilinoId);
@@ -94,7 +100,7 @@ public class GestorResenias {
         }
     }
     
-    public boolean existeResenia(Connection conn, int id) {
+    public boolean existeResenia(int id) {
         String sql = "SELECT 1 FROM Resenias WHERE id = ?";
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
             sentencia.setInt(1, id);

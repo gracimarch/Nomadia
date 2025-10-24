@@ -3,13 +3,18 @@ package com.mycompany.nomadia;
 import java.sql.*;
 
 public class GestorPropiedad {
+    private Connection conn;
 
-    public void agregarCasa(Connection conn, Casa propiedad) {
+    public GestorPropiedad() {
+        this.conn = conn;
+    }
+
+    public void agregarCasa(Casa propiedad) {
         String sql = """
-            INSERT INTO Propiedades (tipo, ubicacion, precioNoche, anfitrionId, maxPersonas, habitaciones, banios,
-                                    parking, petFriendly, parrilla, patio)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """;
+                    INSERT INTO Propiedades (tipo, ubicacion, precioNoche, anfitrionId, maxPersonas, habitaciones, banios,
+                                            parking, petFriendly, parrilla, patio)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """;
 
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
             sentencia.setString(1, propiedad.getTipo());
@@ -31,13 +36,13 @@ public class GestorPropiedad {
         }
     }
 
-    public void agregarDepartamento(Connection conn, Departamento propiedad) {
+    public void agregarDepartamento(Departamento propiedad) {
         String sql = """
-            INSERT INTO Propiedades (tipo, ubicacion, precioNoche, anfitrionId, maxPersonas, habitaciones, banios,
-                                    parking, petFriendly, piso, balcon, zonaComun)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """;
-        
+                INSERT INTO Propiedades (tipo, ubicacion, precioNoche, anfitrionId, maxPersonas, habitaciones, banios,
+                                        parking, petFriendly, piso, balcon, zonaComun)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """;
+
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
             sentencia.setString(1, propiedad.getTipo());
             sentencia.setString(2, propiedad.getUbicacion());
@@ -57,14 +62,14 @@ public class GestorPropiedad {
         } catch (SQLException e) {
             System.out.println("Error al insertar propiedad: " + e.getMessage());
         }
-    }  
+    }
 
-    public void agregarHotel(Connection conn, Hotel propiedad) {
+    public void agregarHotel(Hotel propiedad) {
         String sql = """
-            INSERT INTO Propiedades (tipo, ubicacion, precioNoche, anfitrionId, maxPersonas, habitaciones, banios,
-                                    parking, petFriendly, checkIn, checkOut, servicios)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """;
+                INSERT INTO Propiedades (tipo, ubicacion, precioNoche, anfitrionId, maxPersonas, habitaciones, banios,
+                                        parking, petFriendly, checkIn, checkOut, servicios)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """;
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
             sentencia.setString(1, propiedad.getTipo());
             sentencia.setString(2, propiedad.getUbicacion());
@@ -85,7 +90,7 @@ public class GestorPropiedad {
         }
     }
 
-    public void mostrarPropiedades(Connection conn) {
+    public void mostrarPropiedades() {
         String sql = "SELECT * FROM Propiedades";
 
         try (Statement sentencia = conn.createStatement(); ResultSet rs = sentencia.executeQuery(sql)) {
@@ -99,7 +104,7 @@ public class GestorPropiedad {
         }
     }
 
-    public void eliminarPropiedad(Connection conn, int id) {
+    public void eliminarPropiedad(int id) {
         String sql = "DELETE FROM Propiedades WHERE id = ?";
 
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
@@ -116,8 +121,7 @@ public class GestorPropiedad {
         }
     }
 
-    
-    public void actualizarPropiedad(Connection conn, int id, double nuevoPrecio) {
+    public void actualizarPropiedad(int id, double nuevoPrecio) {
         String sql = "UPDATE Propiedades SET precioNoche = ? WHERE id = ?";
 
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
@@ -137,7 +141,7 @@ public class GestorPropiedad {
         }
     }
 
-    public void actualizarPropiedad(Connection conn, int id, String dato){
+    public void actualizarPropiedad(int id, String dato) {
         String selectSql = "SELECT ? FROM Propiedades WHERE id = ?";
         try (PreparedStatement psSelect = conn.prepareStatement(selectSql)) {
             psSelect.setString(1, dato);
@@ -149,7 +153,8 @@ public class GestorPropiedad {
                 }
 
                 boolean actual = rs.getBoolean(dato);
-                if (rs.wasNull()) actual = false;
+                if (rs.wasNull())
+                    actual = false;
                 boolean nuevo = !actual;
 
                 String updateSql = "UPDATE Propiedades SET ? = ? WHERE id = ?";
@@ -170,7 +175,7 @@ public class GestorPropiedad {
         }
     }
 
-    public void mostrarPropiedadPorId(Connection conn, int id) {
+    public void mostrarPropiedadPorId(int id) {
         String sql = "SELECT * FROM Propiedades WHERE id = ?";
 
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
@@ -187,7 +192,7 @@ public class GestorPropiedad {
         }
     }
 
-    public void mostrarPropiedadesPorAnfitrion(Connection conn, int anfitrionId) {
+    public void mostrarPropiedadesPorAnfitrion(int anfitrionId) {
         String sql = "SELECT * FROM Propiedades WHERE anfitrionId = ?";
 
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
@@ -203,11 +208,11 @@ public class GestorPropiedad {
                 System.out.println("No se encontraron propiedades para el anfitrión con el ID proporcionado");
             }
         } catch (SQLException e) {
-            System.out.println("Error al buscar propiedades: " + e.getMessage());   
+            System.out.println("Error al buscar propiedades: " + e.getMessage());
         }
     }
 
-    public void mostrarPropiedadesPorTipo(Connection conn, String tipo) {
+    public void mostrarPropiedadesPorTipo(String tipo) {
         String sql = "SELECT * FROM Propiedades WHERE tipo = ?";
 
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
@@ -223,11 +228,11 @@ public class GestorPropiedad {
                 System.out.println("No se encontraron propiedades del tipo proporcionado");
             }
         } catch (SQLException e) {
-            System.out.println("Error al buscar propiedades: " + e.getMessage());   
+            System.out.println("Error al buscar propiedades: " + e.getMessage());
         }
     }
 
-    public void mostrarPropiedadesPorUbicacion(Connection conn, String ubicacion) {
+    public void mostrarPropiedadesPorUbicacion(String ubicacion) {
         String sql = "SELECT * FROM Propiedades WHERE ubicacion LIKE ?";
 
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
@@ -238,16 +243,16 @@ public class GestorPropiedad {
             while (rs.next()) {
                 existe = true;
                 imprimirDatos(rs);
-                }
+            }
             if (!existe) {
                 System.out.println("No se encontraron propiedades en la ubicación proporcionada");
             }
         } catch (SQLException e) {
-            System.out.println("Error al buscar propiedades: " + e.getMessage());   
+            System.out.println("Error al buscar propiedades: " + e.getMessage());
         }
     }
 
-    public void mostrarPropiedadesPorPrecioMaximo(Connection conn, double precioMaximo) {
+    public void mostrarPropiedadesPorPrecioMaximo(double precioMaximo) {
         String sql = "SELECT * FROM Propiedades WHERE precioNoche <= ?";
 
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
@@ -258,16 +263,16 @@ public class GestorPropiedad {
             while (rs.next()) {
                 existe = true;
                 imprimirDatos(rs);
-                }
-                if (!existe) {
+            }
+            if (!existe) {
                 System.out.println("No se encontraron propiedades con un precio menor al proporcionado");
             }
         } catch (SQLException e) {
-            System.out.println("Error al buscar propiedades: " + e.getMessage());   
+            System.out.println("Error al buscar propiedades: " + e.getMessage());
         }
     }
 
-    public void mostrarPropiedadesPorCapacidad(Connection conn, int capacidad) {
+    public void mostrarPropiedadesPorCapacidad(int capacidad) {
         String sql = "SELECT * FROM Propiedades WHERE maxPersonas >= ?";
 
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
@@ -283,11 +288,11 @@ public class GestorPropiedad {
                 System.out.println("No se encontraron propiedades con la capacidad mínima requerida");
             }
         } catch (SQLException e) {
-            System.out.println("Error al buscar propiedades: " + e.getMessage());   
+            System.out.println("Error al buscar propiedades: " + e.getMessage());
         }
     }
 
-    public void mostrarPropiedadesPorBoolean(Connection conn, String dato) {
+    public void mostrarPropiedadesPorBoolean(String dato) {
         String sql = "SELECT * FROM Propiedades WHERE ? = 1";
 
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
@@ -303,7 +308,7 @@ public class GestorPropiedad {
                 System.out.println("No se encontraron propiedades con lo requerido");
             }
         } catch (SQLException e) {
-            System.out.println("Error al buscar propiedades: " + e.getMessage());   
+            System.out.println("Error al buscar propiedades: " + e.getMessage());
         }
     }
 
@@ -317,38 +322,50 @@ public class GestorPropiedad {
             System.out.println("Anfitrión ID: " + rs.getInt("anfitrionId"));
             System.out.println("Máx. Personas: " + rs.getInt("maxPersonas"));
 
-            /*Campos opcionales*/
+            /* Campos opcionales */
             int habitaciones = rs.getInt("habitaciones");
-            if (!rs.wasNull()) System.out.println("Habitaciones: " + habitaciones);
+            if (!rs.wasNull())
+                System.out.println("Habitaciones: " + habitaciones);
 
             int banios = rs.getInt("banios");
-            if (!rs.wasNull()) System.out.println("Baños: " + banios);
+            if (!rs.wasNull())
+                System.out.println("Baños: " + banios);
 
             int piso = rs.getInt("piso");
-            if (!rs.wasNull()) System.out.println("Piso: " + piso);
+            if (!rs.wasNull())
+                System.out.println("Piso: " + piso);
 
             String checkIn = rs.getString("checkIn");
-            if (checkIn != null) System.out.println("Check-In: " + checkIn);
+            if (checkIn != null)
+                System.out.println("Check-In: " + checkIn);
 
             String checkOut = rs.getString("checkOut");
-            if (checkOut != null) System.out.println("Check-Out: " + checkOut);
+            if (checkOut != null)
+                System.out.println("Check-Out: " + checkOut);
 
             String servicios = rs.getString("servicios");
-            if (servicios != null) System.out.println("Servicios: " + servicios);
+            if (servicios != null)
+                System.out.println("Servicios: " + servicios);
 
-            if (rs.getBoolean("parking")) System.out.println("Parking disponible");
-            if (rs.getBoolean("petFriendly")) System.out.println("Pet Friendly");
-            if (rs.getBoolean("parrilla")) System.out.println("Parrilla");
-            if (rs.getBoolean("patio")) System.out.println("Patio");
-            if (rs.getBoolean("balcon")) System.out.println("Balcón");
-            if (rs.getBoolean("zonaComun")) System.out.println("Zona Común");
+            if (rs.getBoolean("parking"))
+                System.out.println("Parking disponible");
+            if (rs.getBoolean("petFriendly"))
+                System.out.println("Pet Friendly");
+            if (rs.getBoolean("parrilla"))
+                System.out.println("Parrilla");
+            if (rs.getBoolean("patio"))
+                System.out.println("Patio");
+            if (rs.getBoolean("balcon"))
+                System.out.println("Balcón");
+            if (rs.getBoolean("zonaComun"))
+                System.out.println("Zona Común");
             System.out.println("=================================\n");
         } catch (SQLException e) {
             System.out.println("Error al imprimir datos de la propiedad: " + e.getMessage());
         }
     }
-    
-    public boolean existePropiedad(Connection conn, int id) {
+
+    public boolean existePropiedad(int id) {
         String sql = "SELECT 1 FROM Propiedades WHERE id = ?";
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
             sentencia.setInt(1, id);
@@ -360,8 +377,8 @@ public class GestorPropiedad {
             return false;
         }
     }
-    
-    public double obtenerPrecioNoche(Connection conn, int propiedadId) {
+
+    public double obtenerPrecioNoche(int propiedadId) {
         String sql = "SELECT precioNoche FROM Propiedades WHERE id = ?";
         double precio = 0.0;
 
