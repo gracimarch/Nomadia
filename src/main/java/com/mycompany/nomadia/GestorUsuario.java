@@ -3,8 +3,13 @@ package com.mycompany.nomadia;
 import java.sql.*;
 
 public class GestorUsuario {
+    private Connection conn;
+
+    public GestorUsuario() {
+        this.conn = conn;
+    }
     
-    public void agregarUsuario(Connection conn, Usuario usuario) {
+    public void agregarUsuario(Usuario usuario) {
         String sql = "INSERT INTO Usuarios(nombre, email, telefono, tipo) VALUES(?, ?, ?, ?)";
 
         try (PreparedStatement sentencia = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -28,7 +33,7 @@ public class GestorUsuario {
         }
     }
 
-    public void eliminarUsuario(Connection conn, int id) {
+    public void eliminarUsuario(int id) {
         String sql = "DELETE FROM Usuarios WHERE id = ?";
 
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
@@ -45,7 +50,7 @@ public class GestorUsuario {
         }
     }
 
-    public void actualizarTipoUsuario(Connection conn, int id, String nuevoTipo) {
+    public void actualizarTipoUsuario(int id, String nuevoTipo) {
         // actualiza tipo y el campo descuento según el tipo
         String sql = "UPDATE Usuarios SET tipo = ?, descuento = ? WHERE id = ?";
 
@@ -75,7 +80,7 @@ public class GestorUsuario {
         }
     }
 
-    public void actualizarEmail(Connection conn, int id, String nuevoEmail) {
+    public void actualizarEmail(int id, String nuevoEmail) {
         String sql = "UPDATE Usuarios SET email = ? WHERE id = ?";
 
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
@@ -94,7 +99,7 @@ public class GestorUsuario {
         }
     }
 
-    public void actualizarTelefono(Connection conn, int id, String nuevoTelefono) {
+    public void actualizarTelefono(int id, String nuevoTelefono) {
         String sql = "UPDATE Usuarios SET telefono = ? WHERE id = ?";
 
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
@@ -113,7 +118,7 @@ public class GestorUsuario {
         }
     }
 
-    public void mostrarUsuarioPorId(Connection conn, int id) {
+    public void mostrarUsuarioPorId(int id) {
         String sql = "SELECT * FROM Usuarios WHERE id = ?";
 
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
@@ -130,7 +135,7 @@ public class GestorUsuario {
         }
     }
 
-    public void mostrarUsuariosPorTipo(Connection conn, String tipo) {
+    public void mostrarUsuariosPorTipo(String tipo) {
         String sql = "SELECT * FROM Usuarios WHERE tipo = ?";
 
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
@@ -145,7 +150,7 @@ public class GestorUsuario {
         }
     }
     
-    public void mostrarUsuarios(Connection conn) {
+    public void mostrarUsuarios() {
         String sql = "SELECT * FROM Usuarios";
 
         try (Statement sentencia = conn.createStatement();
@@ -178,7 +183,7 @@ public class GestorUsuario {
         }
     }
 
-    public boolean existeUsuario(Connection conn, int id) {
+    public boolean existeUsuario(int id) {
         String sql = "SELECT 1 FROM Usuarios WHERE id = ?";
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
             sentencia.setInt(1, id);
@@ -191,7 +196,7 @@ public class GestorUsuario {
         }
     }
 
-    public boolean esTipoUsuario(Connection conn, int id, String tipo) {
+    public boolean esTipoUsuario(int id, String tipo) {
         String sql = "SELECT 1 FROM Usuarios WHERE id = ? AND tipo = ?";
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
             sentencia.setInt(1, id);

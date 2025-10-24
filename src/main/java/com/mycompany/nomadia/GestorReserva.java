@@ -3,8 +3,13 @@ package com.mycompany.nomadia;
 import java.sql.*;
 
 public class GestorReserva {
+    private Connection conn;
 
-    public void agregarReserva(Connection conn, Reserva reserva) {
+    public GestorReserva() {
+        this.conn = conn;
+    }
+
+    public void agregarReserva(Reserva reserva) {
         String sql = "INSERT INTO Reservas (propiedadId, inquilinoId, fechaInicio, fechaFin, precioFinal, cantidadPersonas, pagado) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
             sentencia.setInt(1, reserva.getPropiedadId());
@@ -21,7 +26,7 @@ public class GestorReserva {
         }
     }
 
-    public void actualizarReserva(Connection conn, Reserva reserva, int id) {
+    public void actualizarReserva(Reserva reserva, int id) {
         String sql = "UPDATE Reservas SET fechaInicio = ?, fechaFin = ?, precioFinal = ?, cantidadPersonas = ? WHERE id = ?";
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
             sentencia.setDate(1, new java.sql.Date(reserva.getFechaInicio().getTime()));
@@ -36,7 +41,7 @@ public class GestorReserva {
         }
     }
 
-    public void marcarReservaComoPagada(Connection conn, int id) {
+    public void marcarReservaComoPagada(int id) {
         String sql = "UPDATE Reservas SET pagado = 1 WHERE id = ?";
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
             sentencia.setInt(1, id);
@@ -51,7 +56,7 @@ public class GestorReserva {
         }
     }
 
-    public void eliminarReserva(Connection conn, int id) {
+    public void eliminarReserva(int id) {
         String sql = "DELETE FROM Reservas WHERE id = ?";
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
             sentencia.setInt(1, id);
@@ -66,7 +71,7 @@ public class GestorReserva {
         }
     }
 
-    public void mostrarReservas(Connection conn) {
+    public void mostrarReservas() {
         String sql = "SELECT * FROM Reservas";
         try (Statement sentencia = conn.createStatement();
             ResultSet rs = sentencia.executeQuery(sql)) {
@@ -78,7 +83,7 @@ public class GestorReserva {
         }
     }
 
-    public void mostrarReservasPorId(Connection conn, int id) {
+    public void mostrarReservasPorId(int id) {
         String sql = "SELECT * FROM Reservas WHERE id = ?";
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
             sentencia.setInt(1, id);
@@ -92,7 +97,7 @@ public class GestorReserva {
         }
     }
 
-    public void mostrarReservasPorInquilino(Connection conn, int inquilinoId) {
+    public void mostrarReservasPorInquilino(int inquilinoId) {
         String sql = "SELECT * FROM Reservas WHERE inquilinoId = ?";
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
             sentencia.setInt(1, inquilinoId);
@@ -122,7 +127,7 @@ public class GestorReserva {
         }
     }
     
-    public boolean existeReserva(Connection conn, int id) {
+    public boolean existeReserva(int id) {
         String sql = "SELECT 1 FROM Reservas WHERE id = ?";
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
             sentencia.setInt(1, id);
