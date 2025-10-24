@@ -287,7 +287,7 @@ public class GestorPropiedad {
         }
     }
 
-    public void mostrarPropiedadesPetFriendly(Connection conn, String dato) {
+    public void mostrarPropiedadesPorBoolean(Connection conn, String dato) {
         String sql = "SELECT * FROM Propiedades WHERE ? = 1";
 
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
@@ -346,6 +346,36 @@ public class GestorPropiedad {
         } catch (SQLException e) {
             System.out.println("Error al imprimir datos de la propiedad: " + e.getMessage());
         }
+    }
+    
+    public boolean existePropiedad(Connection conn, int id) {
+        String sql = "SELECT 1 FROM Propiedades WHERE id = ?";
+        try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
+            sentencia.setInt(1, id);
+            try (ResultSet rs = sentencia.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al verificar existencia de la propiedad: " + e.getMessage());
+            return false;
+        }
+    }
+    
+    public double obtenerPrecioNoche(Connection conn, int propiedadId) {
+        String sql = "SELECT precioNoche FROM Propiedades WHERE id = ?";
+        double precio = 0.0;
+
+        try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
+            sentencia.setInt(1, propiedadId);
+            ResultSet rs = sentencia.executeQuery();
+
+            if (rs.next()) {
+                precio = rs.getDouble("precioNoche");
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al obtener precio por noche: " + e.getMessage());
+        }
+        return precio;
     }
 
 }
