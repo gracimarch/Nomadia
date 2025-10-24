@@ -471,10 +471,223 @@ public class Nomadia {
                         } while (opc2 != 5);
                         break;
                     case 3:
-                        // Lógica para gestionar reservas
+                        do {
+                            System.out.println("\n¿Qué desea hacer?");
+                            System.out.println("1. Agregar Reserva");
+                            System.out.println("2. Actualizar Reserva");
+                            System.out.println("3. Marcar Reserva como pagada");
+                            System.out.println("4. Eliminar Reserva");
+                            System.out.println("5. Mostrar Reservas");
+                            System.out.println("6. Volver");
+                            opc2 = leerInt(read, "Seleccione una opción: ");
+
+                            switch (opc2) {
+                                case 1: {
+                                    System.out.println("\n== Agregar Reserva ==");
+                                    int propiedadId = leerInt(read, "Propiedad ID: ");
+                                    int inquilinoId = leerInt(read, "Inquilino ID: ");
+
+                                    java.sql.Date fechaInicio = null;
+                                    while (fechaInicio == null) {
+                                        System.out.print("Fecha inicio (YYYY-MM-DD): ");
+                                        String line = read.nextLine().trim();
+                                        try {
+                                            fechaInicio = java.sql.Date.valueOf(java.time.LocalDate.parse(line));
+                                        } catch (Exception e) {
+                                            System.out.println("Formato inválido. Use YYYY-MM-DD.");
+                                        }
+                                    }
+
+                                    java.sql.Date fechaFin = null;
+                                    while (fechaFin == null) {
+                                        System.out.print("Fecha fin (YYYY-MM-DD): ");
+                                        String line = read.nextLine().trim();
+                                        try {
+                                            fechaFin = java.sql.Date.valueOf(java.time.LocalDate.parse(line));
+                                        } catch (Exception e) {
+                                            System.out.println("Formato inválido. Use YYYY-MM-DD.");
+                                        }
+                                    }
+
+                                    double precioFinal = leerDouble(read, "Precio final: ");
+                                    int cantidadPersonas = leerInt(read, "Cantidad de personas: ");
+                                    boolean pagado = false; // por defecto al crear
+
+                                    Reserva nueva = new Reserva(propiedadId, inquilinoId, new java.util.Date(fechaInicio.getTime()), new java.util.Date(fechaFin.getTime()), precioFinal, cantidadPersonas, pagado);
+                                    gestorReserva.agregarReserva(conn, nueva);
+                                    break;
+                                }
+
+                                case 2: {
+                                    int idActualizar = leerInt(read, "\nIngrese el ID de la reserva que desea modificar: ");
+                                    System.out.println("Datos actuales:");
+                                    gestorReserva.mostrarReservasPorId(conn, idActualizar);
+
+                                    java.sql.Date fechaInicio = null;
+                                    while (fechaInicio == null) {
+                                        System.out.print("Nueva fecha inicio (YYYY-MM-DD): ");
+                                        String line = read.nextLine().trim();
+                                        try {
+                                            fechaInicio = java.sql.Date.valueOf(java.time.LocalDate.parse(line));
+                                        } catch (Exception e) {
+                                            System.out.println("Formato inválido. Use YYYY-MM-DD.");
+                                        }
+                                    }
+
+                                    java.sql.Date fechaFin = null;
+                                    while (fechaFin == null) {
+                                        System.out.print("Nueva fecha fin (YYYY-MM-DD): ");
+                                        String line = read.nextLine().trim();
+                                        try {
+                                            fechaFin = java.sql.Date.valueOf(java.time.LocalDate.parse(line));
+                                        } catch (Exception e) {
+                                            System.out.println("Formato inválido. Use YYYY-MM-DD.");
+                                        }
+                                    }
+
+                                    double nuevoPrecio = leerDouble(read, "Nuevo precio final: ");
+                                    int nuevaCant = leerInt(read, "Nueva cantidad de personas: ");
+
+                                    Reserva actualizada = new Reserva(0, 0, new java.util.Date(fechaInicio.getTime()), new java.util.Date(fechaFin.getTime()), nuevoPrecio, nuevaCant, false);
+                                    gestorReserva.actualizarReserva(conn, actualizada, idActualizar);
+                                    break;
+                                }
+
+                                case 3: {
+                                    int idPagar = leerInt(read, "\nIngrese el ID de la reserva a marcar como pagada: ");
+                                    gestorReserva.marcarReservaComoPagada(conn, idPagar);
+                                    break;
+                                }
+
+                                case 4: {
+                                    int idEliminar = leerInt(read, "\nIngrese el ID de la reserva que desea eliminar: ");
+                                    gestorReserva.eliminarReserva(conn, idEliminar);
+                                    break;
+                                }
+
+                                case 5: {
+                                    do {
+                                        System.out.println("\n¿Qué desea mostrar?");
+                                        System.out.println("1. Mostrar todas");
+                                        System.out.println("2. Mostrar por ID");
+                                        System.out.println("3. Mostrar por Inquilino");
+                                        System.out.println("4. Volver");
+                                        opc3 = leerInt(read, "Seleccione una opción: ");
+
+                                        switch (opc3) {
+                                            case 1:
+                                                gestorReserva.mostrarReservas(conn);
+                                                break;
+                                            case 2: {
+                                                int idMostrar = leerInt(read, "Ingrese ID de la reserva: ");
+                                                gestorReserva.mostrarReservasPorId(conn, idMostrar);
+                                                break;
+                                            }
+                                            case 3: {
+                                                int inqId = leerInt(read, "Ingrese ID del inquilino: ");
+                                                gestorReserva.mostrarReservasPorInquilino(conn, inqId);
+                                                break;
+                                            }
+                                            case 4:
+                                                break;
+                                            default:
+                                                System.out.println("Opción no válida. Intente de nuevo.");
+                                        }
+                                    } while (opc3 != 4);
+                                    break;
+                                }
+
+                                case 6:
+                                    System.out.println("\nVolviendo a menú principal...");
+                                    break;
+
+                                default:
+                                    System.out.println("\nOpción no válida. Intente de nuevo.");
+                            }
+                        } while (opc2 != 6);
                         break;
                     case 4:
-                        // Lógica para gestionar reseñas
+                        do {
+                            System.out.println("\n¿Qué desea hacer con Reseñas?");
+                            System.out.println("1. Agregar Reseña");
+                            System.out.println("2. Actualizar Reseña");
+                            System.out.println("3. Eliminar Reseña");
+                            System.out.println("4. Mostrar Reseñas");
+                            System.out.println("5. Volver");
+                            opc2 = leerInt(read, "Seleccione una opción: ");
+
+                            switch (opc2) {
+                                case 1: {
+                                    System.out.println("\n== Agregar Reseña ==");
+                                    int propiedadId = leerInt(read, "Propiedad ID: ");
+                                    int inquilinoId = leerInt(read, "Inquilino ID: ");
+                                    System.out.print("Comentario: ");
+                                    String comentario = read.nextLine();
+                                    int puntaje = leerInt(read, "Puntaje (enteros): ");
+
+                                    Resenia nueva = new Resenia(propiedadId, inquilinoId, comentario, puntaje);
+                                    gestorResenias.agregarResenia(conn, nueva);
+                                    break;
+                                }
+
+                                case 2: {
+                                    int idActualizar = leerInt(read, "\nIngrese el ID de la reseña que desea modificar: ");
+                                    System.out.println("Ingrese los nuevos datos:");
+                                    System.out.print("Nuevo comentario: ");
+                                    String comentarioNuevo = read.nextLine();
+                                    int puntajeNuevo = leerInt(read, "Nuevo puntaje (enteros): ");
+
+                                    Resenia actualizada = new Resenia(0, 0, comentarioNuevo, puntajeNuevo);
+                                    gestorResenias.actualizarResenia(conn, actualizada, idActualizar);
+                                    break;
+                                }
+
+                                case 3: {
+                                    int idEliminar = leerInt(read, "\nIngrese el ID de la reseña que desea eliminar: ");
+                                    gestorResenias.eliminarResenia(conn, idEliminar);
+                                    break;
+                                }
+
+                                case 4: {
+                                    do {
+                                        System.out.println("\n¿Qué desea mostrar?");
+                                        System.out.println("1. Mostrar todas");
+                                        System.out.println("2. Mostrar por Propiedad");
+                                        System.out.println("3. Mostrar por Inquilino");
+                                        System.out.println("4. Volver");
+                                        opc3 = leerInt(read, "Seleccione una opción: ");
+
+                                        switch (opc3) {
+                                            case 1:
+                                                gestorResenias.mostrarResenias(conn);
+                                                break;
+                                            case 2: {
+                                                int propiedadId = leerInt(read, "Ingrese ID de la propiedad: ");
+                                                gestorResenias.mostrarReseniasPorPropiedad(conn, propiedadId);
+                                                break;
+                                            }
+                                            case 3: {
+                                                int inquilinoId = leerInt(read, "Ingrese ID del inquilino: ");
+                                                gestorResenias.mostrarReseniasPorInquilino(conn, inquilinoId);
+                                                break;
+                                            }
+                                            case 4:
+                                                break;
+                                            default:
+                                                System.out.println("Opción no válida. Intente de nuevo.");
+                                        }
+                                    } while (opc3 != 4);
+                                    break;
+                                }
+
+                                case 5:
+                                    System.out.println("\nVolviendo a menú principal...");
+                                    break;
+
+                                default:
+                                    System.out.println("\nOpción no válida. Intente de nuevo.");
+                            }
+                        } while (opc2 != 5);
                         break;
                     case 5:
                         System.out.println("\nSaliendo del programa...");
