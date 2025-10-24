@@ -4,7 +4,8 @@ public class PagoTransferencia implements Pago {
 
     @Override
     public void procesarPago(double monto) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        System.out.println("Procesando transferencia bancaria: $" + monto);
+        
+        System.out.println("Transferencia confirmada.");
     }
-    
 }

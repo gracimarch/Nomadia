@@ -4,7 +4,8 @@ public class PagoEfectivo implements Pago {
 
     @Override
     public void procesarPago(double monto) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        System.out.println("Procesando pago en efectivo: $" + monto);
+        
+        System.out.println("Pago en efectivo recibido.");
     }
-    
 }
