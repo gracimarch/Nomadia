@@ -107,18 +107,31 @@ public class GestorReserva {
     }
 
     public void imprimirDatosReserva(ResultSet rs) {
-    try {
-        System.out.println("=========== Reserva " + rs.getInt("id") + " ===========");
-        System.out.println("Propiedad ID: " + rs.getInt("propiedadId"));
-        System.out.println("Inquilino ID: " + rs.getInt("inquilinoId"));
-        System.out.println("Fecha Inicio: " + rs.getDate("fechaInicio"));
-        System.out.println("Fecha Fin: " + rs.getDate("fechaFin"));
-        System.out.println("Precio Final: $" + rs.getDouble("precioFinal"));
-        System.out.println("Cantidad de Personas: " + rs.getInt("cantidadPersonas"));
-        System.out.println("Pagado: " + (rs.getBoolean("pagado") ? "Sí" : "No"));
-        System.out.println("=================================\n");
-    } catch (SQLException e) {
-        System.out.println("Error al imprimir datos de la reserva: " + e.getMessage());
+        try {
+            System.out.println("=========== Reserva " + rs.getInt("id") + " ===========");
+            System.out.println("Propiedad ID: " + rs.getInt("propiedadId"));
+            System.out.println("Inquilino ID: " + rs.getInt("inquilinoId"));
+            System.out.println("Fecha Inicio: " + rs.getDate("fechaInicio"));
+            System.out.println("Fecha Fin: " + rs.getDate("fechaFin"));
+            System.out.println("Precio Final: $" + rs.getDouble("precioFinal"));
+            System.out.println("Cantidad de Personas: " + rs.getInt("cantidadPersonas"));
+            System.out.println("Pagado: " + (rs.getBoolean("pagado") ? "Sí" : "No"));
+            System.out.println("=================================\n");
+        } catch (SQLException e) {
+            System.out.println("Error al imprimir datos de la reserva: " + e.getMessage());
+        }
     }
-}
+    
+    public boolean existeReserva(Connection conn, int id) {
+        String sql = "SELECT 1 FROM Reservas WHERE id = ?";
+        try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
+            sentencia.setInt(1, id);
+            try (ResultSet rs = sentencia.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al verificar existencia de la reserva: " + e.getMessage());
+            return false;
+        }
+    }
 }
