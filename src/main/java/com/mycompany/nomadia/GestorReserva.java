@@ -7,13 +7,13 @@ public class GestorReserva {
     public void agregarReserva(Connection conn, Reserva reserva) {
         String sql = "INSERT INTO Reservas (propiedadId, inquilinoId, fechaInicio, fechaFin, precioFinal, cantidadPersonas, pagado) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
-            sentencia.setInt(2, reserva.getPropiedadId());
-            sentencia.setInt(3, reserva.getInquilinoId());
-            sentencia.setDate(4, new java.sql.Date(reserva.getFechaInicio().getTime()));
-            sentencia.setDate(5, new java.sql.Date(reserva.getFechaFin().getTime()));
-            sentencia.setDouble(6, reserva.getPrecioFinal());
-            sentencia.setInt(7, reserva.getCantidadPersonas());
-            sentencia.setBoolean(8, reserva.isPagado());
+            sentencia.setInt(1, reserva.getPropiedadId());
+            sentencia.setInt(2, reserva.getInquilinoId());
+            sentencia.setDate(3, new java.sql.Date(reserva.getFechaInicio().getTime()));
+            sentencia.setDate(4, new java.sql.Date(reserva.getFechaFin().getTime()));
+            sentencia.setDouble(5, reserva.getPrecioFinal());
+            sentencia.setInt(6, reserva.getCantidadPersonas());
+            sentencia.setBoolean(7, reserva.isPagado());
             sentencia.executeUpdate();
             System.out.println("Reserva agregada correctamente.");
         } catch (SQLException e) {
