@@ -93,4 +93,17 @@ public class GestorResenias {
             System.out.println("Error al imprimir datos de la reseña: " + e.getMessage());
         }
     }
+    
+    public boolean existeResenia(Connection conn, int id) {
+        String sql = "SELECT 1 FROM Resenias WHERE id = ?";
+        try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
+            sentencia.setInt(1, id);
+            try (ResultSet rs = sentencia.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al verificar existencia de la reserva: " + e.getMessage());
+            return false;
+        }
+    }
 }
