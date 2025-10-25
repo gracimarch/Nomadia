@@ -16,6 +16,24 @@ public class Leer {
         }
     }
 
+    public static int leerIntPositivo(Scanner sc, String texto) {
+        while (true) {
+            System.out.print(texto);
+            String line = sc.nextLine();
+            try {
+                int numero = Integer.parseInt(line.trim());
+
+                if (numero > 0) {
+                    return numero;
+                } else {
+                    System.out.println("Entrada inválida. Ingrese un número positivo (mayor que 0).");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Entrada inválida. Ingrese un número.");
+            }
+        }
+    }
+
     public static double leerDouble(Scanner sc, String texto) {
         while (true) {
             System.out.print(texto);
