@@ -1,6 +1,8 @@
 package com.mycompany.nomadia;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 public class GestorReserva {
     private Connection conn;
@@ -14,8 +16,8 @@ public class GestorReserva {
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
             sentencia.setInt(1, reserva.getPropiedadId());
             sentencia.setInt(2, reserva.getInquilinoId());
-            sentencia.setDate(3, new java.sql.Date(reserva.getFechaInicio().getTime()));
-            sentencia.setDate(4, new java.sql.Date(reserva.getFechaFin().getTime()));
+            sentencia.setObject(3, reserva.getFechaInicio());
+            sentencia.setObject(4, reserva.getFechaFin());
             sentencia.setDouble(5, reserva.getPrecioFinal());
             sentencia.setInt(6, reserva.getCantidadPersonas());
             sentencia.setBoolean(7, reserva.isPagado());
@@ -29,8 +31,8 @@ public class GestorReserva {
     public void actualizarReserva(Reserva reserva, int id) {
         String sql = "UPDATE Reservas SET fechaInicio = ?, fechaFin = ?, precioFinal = ?, cantidadPersonas = ? WHERE id = ?";
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
-            sentencia.setDate(1, new java.sql.Date(reserva.getFechaInicio().getTime()));
-            sentencia.setDate(2, new java.sql.Date(reserva.getFechaFin().getTime()));
+            sentencia.setObject(1, reserva.getFechaInicio());
+            sentencia.setObject(2, reserva.getFechaFin());
             sentencia.setDouble(3, reserva.getPrecioFinal());
             sentencia.setInt(4, reserva.getCantidadPersonas());
             sentencia.setInt(5, id);

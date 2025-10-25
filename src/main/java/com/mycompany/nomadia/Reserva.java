@@ -1,24 +1,43 @@
 package com.mycompany.nomadia;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 public class Reserva {
     private int propiedadId;
     private int inquilinoId;
-    private Date fechaInicio;
-    private Date fechaFin;
+    private LocalDate fechaInicio;
+    private LocalDate fechaFin;
     private double precioFinal;
     private int cantidadPersonas;
     private boolean pagado;
 
-    public Reserva(int propiedadId, int inquilinoId, Date fechaInicio, Date fechaFin, double precioFinal, int cantidadPersonas, boolean pagado) {
+    public Reserva(int propiedadId, int inquilinoId, LocalDate fechaInicio, LocalDate fechaFin, 
+                   double precioNoche, int cantidadPersonas, boolean pagado) {
+        
         this.propiedadId = propiedadId;
         this.inquilinoId = inquilinoId;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
-        this.precioFinal = precioFinal;
         this.cantidadPersonas = cantidadPersonas;
         this.pagado = pagado;
+        this.calcularPrecio(precioNoche); 
+    }
+    
+    public LocalDate getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(LocalDate fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public LocalDate getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(LocalDate fechaFin) {
+        this.fechaFin = fechaFin;
     }
 
     public int getPropiedadId() {
@@ -35,22 +54,6 @@ public class Reserva {
 
     public void setInquilinoId(int inquilinoId) {
         this.inquilinoId = inquilinoId;
-    }
-    
-    public Date getFechaInicio() {
-        return fechaInicio;
-    }
-
-    public void setFechaInicio(Date fechaInicio) {
-        this.fechaInicio = fechaInicio;
-    }
-
-    public Date getFechaFin() {
-        return fechaFin;
-    }
-
-    public void setFechaFin(Date fechaFin) {
-        this.fechaFin = fechaFin;
     }
 
     public double getPrecioFinal() {
@@ -77,5 +80,14 @@ public class Reserva {
         this.pagado = pagado;
     }
     
+    public double calcularPrecio(double precioNoche) { 
     
+    long noches = ChronoUnit.DAYS.between(this.fechaInicio, this.fechaFin);
+
+    this.precioFinal = precioNoche * noches; 
+    
+    System.out.println("Precio final calculado: $" + String.format("%.2f", this.precioFinal));
+    
+    return this.precioFinal;
+    }
 }
