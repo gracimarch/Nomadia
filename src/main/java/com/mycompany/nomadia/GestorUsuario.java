@@ -5,7 +5,7 @@ import java.sql.*;
 public class GestorUsuario {
     private Connection conn;
 
-    public GestorUsuario() {
+    public GestorUsuario(Connection conn) {
         this.conn = conn;
     }
     

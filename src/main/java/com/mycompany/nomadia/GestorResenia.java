@@ -2,10 +2,10 @@ package com.mycompany.nomadia;
 
 import java.sql.*;
 
-public class GestorResenias {
+public class GestorResenia {
     private Connection conn;
 
-    public GestorResenias() {
+    public GestorResenia(Connection conn) {
         this.conn = conn;
     }
 

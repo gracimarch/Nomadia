@@ -7,7 +7,7 @@ import java.time.temporal.ChronoUnit;
 public class GestorReserva {
     private Connection conn;
 
-    public GestorReserva() {
+    public GestorReserva(Connection conn) {
         this.conn = conn;
     }
 
