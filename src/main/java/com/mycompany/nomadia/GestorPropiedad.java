@@ -315,7 +315,6 @@ public class GestorPropiedad {
     public void imprimirDatos(ResultSet rs) {
         try {
             System.out.println("========== Propiedad " + rs.getInt("id") + " ==========");
-            System.out.println("ID: " + rs.getInt("id"));
             System.out.println("Tipo: " + rs.getString("tipo"));
             System.out.println("Ubicación: " + rs.getString("ubicacion"));
             System.out.println("Precio/Noche: $" + rs.getDouble("precioNoche"));
