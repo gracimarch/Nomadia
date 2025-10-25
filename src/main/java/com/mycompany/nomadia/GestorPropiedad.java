@@ -430,4 +430,21 @@ public class GestorPropiedad {
         return precio;
     }
 
+    public int obtenerMaxPersonas(int propiedadId) {
+        String sql = "SELECT maxPersonas FROM Propiedades WHERE id = ?";
+        int maxPersonas = 0;
+
+        try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
+            sentencia.setInt(1, propiedadId);
+            ResultSet rs = sentencia.executeQuery();
+
+            if (rs.next()) {
+                maxPersonas = rs.getInt("maxPersonas");
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al obtener capacidad máxima: " + e.getMessage());
+        }
+        return maxPersonas;
+    }
+    
 }
