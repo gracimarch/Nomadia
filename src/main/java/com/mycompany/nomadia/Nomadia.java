@@ -453,208 +453,118 @@ public class Nomadia {
                         opc2 = Leer.leerInt(read, "Seleccione una opción: ");
 
                         switch (opc2) {
-                            case 1: {
-                                System.out.println("\n== Agregar Reserva ==");
-
-                                int propiedadId = Leer.leerInt(read, "Propiedad ID: ");
-                                if (!gestorPropiedad.existePropiedad(propiedadId)) {
-                                    System.out.println("No se encontró la propiedad con el ID proporcionado. Volviendo al menú de reservas.");
-                                    break;
-                                }
-
-                                double precioNoche = gestorPropiedad.obtenerPrecioNoche(propiedadId);
-                                if (precioNoche <= 0) {
-                                    System.out.println("Error: No se pudo obtener el precio por noche o es inválido.");
-                                    break;
-                                }
-
-                                int inquilinoId = Leer.leerInt(read, "Inquilino ID: ");
-                                if (!gestorUsuario.existeUsuario(inquilinoId)) {
-                                    System.out.println("No se encontró el usuario con el ID proporcionado. Volviendo al menú de reservas.");
-                                    break;
-                                }
-                                if (gestorUsuario.esTipoUsuario(inquilinoId, "Anfitrion")) {
-                                    System.out.println("El id del Usuario no es inquilino");
-                                    break;
-                                }
-
-                                LocalDate fechaInicio = Leer.leerFecha(read, "Fecha inicio (YYYY-MM-DD): ");
-
-                                LocalDate fechaFin = null;
-
-                                while (fechaFin == null) {
-                                    fechaFin = Leer.leerFecha(read, "Fecha fin (YYYY-MM-DD): ");
-                                    
-                                    if (fechaFin != null && (fechaFin.isBefore(fechaInicio) || fechaFin.equals(fechaInicio))) {
-                                        System.out.println("La fecha de fin debe ser posterior a la fecha de inicio.");
-                                        fechaFin = null;
-                                    }
-                                }
-
-                                int cantidadPersonas = Leer.leerInt(read, "Cantidad de personas: ");
-                                boolean pagado = false;
-
-                                Reserva nueva = new Reserva(propiedadId, inquilinoId, fechaInicio, fechaFin, 
-                                                            precioNoche, cantidadPersonas, pagado);
-                                
-                                gestorReserva.agregarReserva(nueva);
+                            case 1:
+                                Reserva.crearReserva(read, gestorReserva, gestorPropiedad, gestorUsuario);
                                 break;
-                            }
 
-                            case 2: {
+                            case 2:
                                 int id = Leer.leerInt(read, "\nIngrese el ID de la reserva que desea modificar: ");
                                 if (!gestorReserva.existeReserva(id)) {
-                                    System.out.println(
-                                            "No se encontró la reserva con el ID proporcionado. Volviendo al menú de reservas.");
+                                    System.out.println("No se encontró la reserva con el ID proporcionado. Volviendo al menú de reservas.");
                                     break;
                                 }
                                 System.out.println("Datos actuales:");
                                 gestorReserva.mostrarReservasPorId(id);
 
-                                int opcionModificar = 0;
                                 do {
                                     System.out.println("\n¿Qué desea modificar?");
                                     System.out.println("1. Fechas (inicio y/o fin)");
                                     System.out.println("2. Cantidad de personas");
                                     System.out.println("3. Volver");
-                                    opcionModificar = Leer.leerInt(read, "Seleccione una opción: ");
-                                    /*
-                                    switch (opcionModificar) {
-                                        case 1: {
-                                            // Obtener propiedadId y cantidad actual desde la BD
-                                            int propiedadId = -1;
-                                            int cantidadActual = 1;
-                                            String sql = "SELECT propiedadId, cantidadPersonas FROM Reservas WHERE id = ?";
-                                            try (PreparedStatement ps = conn.prepareStatement(sql)) {
-                                                ps.setInt(1, id);
-                                                try (ResultSet rs = ps.executeQuery()) {
-                                                    if (rs.next()) {
-                                                        propiedadId = rs.getInt("propiedadId");
-                                                        cantidadActual = rs.getInt("cantidadPersonas");
-                                                    }
-                                                }
-                                            } catch (SQLException e) {
-                                                System.out.println("Error al obtener datos de la reserva: " + e.getMessage());
-                                                break;
-                                            }
+                                    opc3 = Leer.leerInt(read, "Seleccione una opción: ");
+                                    
+                                    int propiedadId = gestorReserva.obtenerPropiedadId(id);
 
-                                            java.sql.Date nuevaFechaInicio = null;
-                                            while (nuevaFechaInicio == null) {
-                                                System.out.print("Nueva fecha inicio (YYYY-MM-DD): ");
-                                                String line = read.nextLine().trim();
-                                                try {
-                                                    nuevaFechaInicio = java.sql.Date
-                                                            .valueOf(java.time.LocalDate.parse(line));
-                                                } catch (Exception e) {
-                                                    System.out.println("Formato inválido. Use YYYY-MM-DD.");
-                                                }
-                                            }
-
-                                            java.sql.Date nuevaFechaFin = null;
-                                            while (nuevaFechaFin == null) {
-                                                System.out.print("Nueva fecha fin (YYYY-MM-DD): ");
-                                                String line = read.nextLine().trim();
-                                                try {
-                                                    nuevaFechaFin = java.sql.Date
-                                                            .valueOf(java.time.LocalDate.parse(line));
-                                                    if (nuevaFechaFin.before(nuevaFechaInicio)
-                                                            || nuevaFechaFin.equals(nuevaFechaInicio)) {
-                                                        System.out.println(
-                                                                "La fecha de fin debe ser posterior a la fecha de inicio.");
-                                                        nuevaFechaFin = null;
-                                                    }
-                                                } catch (Exception e) {
-                                                    System.out.println("Formato inválido. Use YYYY-MM-DD.");
-                                                }
-                                            }
+                                    switch (opc3) {
+                                        case 1:
+                                            LocalDate nuevaFechaInicio = Leer.leerFecha(read, "Nueva fecha inicio (YYYY-MM-DD): ");
+                                            LocalDate nuevaFechaFin = Reserva.esFechaValida(read, nuevaFechaInicio);
 
                                             double precioNoche = gestorPropiedad.obtenerPrecioNoche(propiedadId);
                                             if (precioNoche <= 0) {
-                                                System.out.println(
-                                                        "Error: No se pudo obtener el precio por noche o es inválido. No se actualizó la reserva.");
+                                                System.out.println("Error: No se pudo obtener el precio por noche o es inválido. No se actualizó la reserva.");
                                                 break;
                                             }
 
-                                            java.time.LocalDate inicio = nuevaFechaInicio.toLocalDate();
-                                            java.time.LocalDate fin = nuevaFechaFin.toLocalDate();
-                                            long noches = java.time.temporal.ChronoUnit.DAYS.between(inicio, fin);
-                                            double precioFinal = precioNoche * noches;
+                                            double precioFinal = Reserva.calcularPrecio(precioNoche, nuevaFechaInicio, nuevaFechaFin);
 
-                                            Reserva actualizadaFechas = new Reserva(0, 0,
-                                                    new java.util.Date(nuevaFechaInicio.getTime()),
-                                                    new java.util.Date(nuevaFechaFin.getTime()), precioFinal,
-                                                    cantidadActual, false);
-                                            gestorReserva.actualizarReserva(actualizadaFechas, id);
+                                            gestorReserva.actualizarReserva(id, nuevaFechaInicio, nuevaFechaFin, precioFinal);
                                             break;
-                                        }
 
-                                        case 2: {
-                                            // Obtener fechas y propiedadId actuales desde la BD para recalcular precio
-                                            int propiedadId = -1;
-                                            java.sql.Date fechaInicioAct = null;
-                                            java.sql.Date fechaFinAct = null;
-                                            String sql = "SELECT propiedadId, fechaInicio, fechaFin FROM Reservas WHERE id = ?";
-                                            try (PreparedStatement ps = conn.prepareStatement(sql)) {
-                                                ps.setInt(1, id);
-                                                try (ResultSet rs = ps.executeQuery()) {
-                                                    if (rs.next()) {
-                                                        propiedadId = rs.getInt("propiedadId");
-                                                        fechaInicioAct = rs.getDate("fechaInicio");
-                                                        fechaFinAct = rs.getDate("fechaFin");
-                                                    }
-                                                }
-                                            } catch (SQLException e) {
-                                                System.out.println(
-                                                        "Error al obtener datos de la reserva: " + e.getMessage());
-                                                break;
-                                            }
+                                        case 2:
+                                            int nuevaCant = Reserva.leerCantidadPersonasValida(read, gestorPropiedad, propiedadId);
 
-                                            int nuevaCant = Leer.leerInt(read, "Nueva cantidad de personas: ");
-
-                                            double precioNoche = gestorPropiedad.obtenerPrecioNoche(propiedadId);
-                                            if (precioNoche <= 0 || fechaInicioAct == null || fechaFinAct == null) {
-                                                System.out.println(
-                                                        "Error: No se pudo obtener datos necesarios para calcular el precio. No se actualizó la reserva.");
-                                                break;
-                                            }
-
-                                            java.time.LocalDate inicio = fechaInicioAct.toLocalDate();
-                                            java.time.LocalDate fin = fechaFinAct.toLocalDate();
-                                            long noches = java.time.temporal.ChronoUnit.DAYS.between(inicio, fin);
-                                            double precioFinal = precioNoche * noches;
-
-                                            Reserva actualizadaCant = new Reserva(0, 0,
-                                                    new java.util.Date(fechaInicioAct.getTime()),
-                                                    new java.util.Date(fechaFinAct.getTime()), precioFinal, nuevaCant,
-                                                    false);
-                                            gestorReserva.actualizarReserva(actualizadaCant, id);
+                                            gestorReserva.actualizarReserva(id, nuevaCant);
                                             break;
-                                        }
                                         case 3:
                                             System.out.println("Volviendo...");
                                             break;
 
                                         default:
                                             System.out.println("Opción no válida. Intente de nuevo.");
-                                    }*/
+                                    }
 
-                                } while (opcionModificar != 4);
+                                } while (opc3 != 3);
                                 break;
-                            }
 
-                            case 3: {
+                            case 3:
                                 int idPagar = Leer.leerInt(read, "\nIngrese el ID de la reserva a marcar como pagada: ");
-                                gestorReserva.marcarReservaComoPagada(idPagar);
-                                break;
-                            }
+                                
+                                if(!gestorReserva.existeReserva(idPagar)){
+                                    System.out.println("Error: No se encontró ninguna reserva con el ID " + idPagar);
+                                    break;
+                                }
 
-                            case 4: {
-                                int idEliminar = Leer.leerInt(read, "\nIngrese el ID de la reserva que desea eliminar: ");
-                                gestorReserva.eliminarReserva(idEliminar);
-                                break;
-                            }
+                                Reserva reservaAPagar = gestorReserva.buscarReserva(idPagar);
 
-                            case 5: {
+                                if (reservaAPagar.isPagado()) {
+                                    System.out.println("Esta reserva ya se encuentra pagada.");
+                                    break;
+                                }
+
+                                double monto = reservaAPagar.getPrecioFinal();
+                                System.out.println("El monto total a pagar es: $" + String.format("%.2f", monto));
+                                
+                                System.out.println("Seleccione el método de pago:");
+                                System.out.println("1. Efectivo");
+                                System.out.println("2. Tarjeta");
+                                System.out.println("3. Transferencia");
+                                System.out.println("4. Cancelar");
+                                opc3 = Leer.leerInt(read, "Opción: ");
+
+                                Pago metodoDePago = null;
+
+                                switch (opc3) {
+                                    case 1:
+                                        metodoDePago = new PagoEfectivo();
+                                        break;
+                                    case 2:
+                                        metodoDePago = new PagoTarjeta();
+                                        break;
+                                    case 3:
+                                        metodoDePago = new PagoTransferencia();
+                                        break;
+                                    case 4:
+                                        System.out.println("Pago cancelado.");
+                                        break;
+                                    default:
+                                        System.out.println("Opción de pago no válida.");
+                                        break;
+                                }
+
+                                if (metodoDePago != null) {
+                                    metodoDePago.procesarPago(monto, read); 
+                                    
+                                    gestorReserva.marcarReservaComoPagada(idPagar);
+                                    System.out.println("Reserva ID " + idPagar + " marcada como pagada.");
+                                }
+                                break;
+
+                            case 4:
+                                Reserva.eliminarReserva(read, gestorReserva);
+                                break;
+
+                            case 5:
                                 do {
                                     System.out.println("\n¿Qué desea mostrar?");
                                     System.out.println("1. Mostrar todas");
@@ -670,8 +580,7 @@ public class Nomadia {
                                         case 2: {
                                             int idMostrar = Leer.leerInt(read, "Ingrese ID de la reserva: ");
                                             if (!gestorPropiedad.existePropiedad(idMostrar)) {
-                                                System.out.println(
-                                                        "No se encontró la reserva con el ID proporcionado. Volviendo...");
+                                                System.out.println("No se encontró la reserva con el ID proporcionado. Volviendo...");
                                                 break;
                                             }
                                             gestorReserva.mostrarReservasPorId(idMostrar);
@@ -680,12 +589,11 @@ public class Nomadia {
                                         case 3: {
                                             int inqId = Leer.leerInt(read, "Ingrese ID del inquilino: ");
                                             if (!gestorUsuario.existeUsuario(inqId)) {
-                                                System.out.println(
-                                                        "No se encontró el usuario con el ID proporcionado. Volviendo al menú de reservas.");
+                                                System.out.println("No se encontró el usuario con el ID proporcionado. Volviendo al menú de reservas.");
                                                 break;
                                             }
                                             if (gestorUsuario.esTipoUsuario(inqId, "Anfitrion")) {
-                                                System.out.println("El id del Usuario no es inquilino");
+                                                System.out.println("El ID del Usuario no es inquilino");
                                                 break;
                                             }
                                             gestorReserva.mostrarReservasPorInquilino(inqId);
@@ -700,7 +608,6 @@ public class Nomadia {
                                     }
                                 } while (opc3 != 4);
                                 break;
-                            }
 
                             case 6:
                                 System.out.println("\nVolviendo a menú principal...");
