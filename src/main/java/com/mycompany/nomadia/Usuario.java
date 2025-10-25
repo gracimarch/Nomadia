@@ -1,6 +1,5 @@
 package com.mycompany.nomadia;
 
-import java.sql.*;
 import java.util.Scanner;
 
 public abstract class Usuario {
@@ -66,16 +65,19 @@ public abstract class Usuario {
     }
 
     public static void eliminarUsuario(Scanner read, GestorUsuario gu) {
-        System.out.println("\nIngrese el ID del usuario a eliminar:");
-        int idEliminar = Integer.parseInt(read.nextLine());
-        gu.eliminarUsuario(idEliminar);
+        int id = Leer.leerInt(read, "\nIngrese el ID del usuario que desea eliminar: ");
+        if (!gu.existeUsuario(id)) {
+            System.out.println("No se encontró el usuario con el ID proporcionado.");
+        } else {
+            gu.eliminarUsuario(id);
+        }
     }
 
     public static void actualizarUsuario(Scanner read, GestorUsuario gu, String dato) {
         System.out.println("\nIngrese el ID del usuario a actualizar:");
         int idActualizar = Integer.parseInt(read.nextLine());
         System.out.println("Ingrese el nuevo "+ dato + ":");
-        String nuevoEmail = read.nextLine();
-        gu.actualizarUsuario(idActualizar, dato, nuevoEmail);
+        String nuevo = read.nextLine();
+        gu.actualizarUsuario(idActualizar, dato, nuevo);
     }
 }
