@@ -90,20 +90,6 @@ public class GestorPropiedad {
         }
     }
 
-    public void mostrarPropiedades() {
-        String sql = "SELECT * FROM Propiedades";
-
-        try (Statement sentencia = conn.createStatement(); ResultSet rs = sentencia.executeQuery(sql)) {
-
-            while (rs.next()) {
-                imprimirDatos(rs);
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Error al mostrar propiedades: " + e.getMessage());
-        }
-    }
-
     public void eliminarPropiedad(int id) {
         String sql = "DELETE FROM Propiedades WHERE id = ?";
 
@@ -172,6 +158,20 @@ public class GestorPropiedad {
             }
         } catch (SQLException e) {
             System.out.println("Error al actualizar propiedad: " + e.getMessage());
+        }
+    }
+
+    public void mostrarPropiedades() {
+        String sql = "SELECT * FROM Propiedades";
+
+        try (Statement sentencia = conn.createStatement(); ResultSet rs = sentencia.executeQuery(sql)) {
+
+            while (rs.next()) {
+                imprimirDatos(rs);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al mostrar propiedades: " + e.getMessage());
         }
     }
 
