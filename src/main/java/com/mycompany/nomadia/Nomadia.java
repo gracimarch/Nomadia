@@ -161,6 +161,8 @@ public class Nomadia {
 
                                         case 2:
                                             gestorUsuario.mostrarUsuariosPorTipo("Inquilino");
+                                            System.out.println("\nInquilinos Premium:");
+                                            gestorUsuario.mostrarUsuariosPorTipo("InquilinoPremium");
                                             break;
 
                                         case 3:
@@ -334,7 +336,7 @@ public class Nomadia {
                                             gestorPropiedad.mostrarPropiedadesPorAnfitrion(anfitrionId);
                                             break;
                                         case 3:
-                                            System.out.print("¿Qué tipo desea mostrar?");
+                                            System.out.println("\n¿Qué tipo desea mostrar?");
                                             System.out.println("1. Casa");
                                             System.out.println("2. Departamento");
                                             System.out.println("3. Hotel");
@@ -380,7 +382,7 @@ public class Nomadia {
                                             gestorPropiedad.mostrarPropiedadesPorCapacidad(capacidad);
                                             break;
                                         case 8:
-                                            System.out.println("Seleccione el adicional por el que desea filtrar:");
+                                            System.out.println("\nSeleccione el adicional por el que desea filtrar:");
                                             System.out.println("1. Parking");
                                             System.out.println("2. PetFriendly");
                                             System.out.println("3. Parrilla");
@@ -660,7 +662,6 @@ public class Nomadia {
                                         }
                                         case 3: {
                                             int inquilinoId = Leer.leerInt(read, "Ingrese ID del inquilino: ");
-                                            gestorResenia.mostrarReseniasPorInquilino(inquilinoId);
                                             if (gestorUsuario.existeUsuario(inquilinoId)) {
                                                 gestorResenia.mostrarReseniasPorInquilino(inquilinoId);
                                             } else {
