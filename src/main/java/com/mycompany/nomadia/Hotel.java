@@ -1,17 +1,17 @@
 package com.mycompany.nomadia;
 
-import java.util.ArrayList;
-
 public class Hotel extends Propiedad {
     private String checkIn;
     private String checkOut;
-    private ArrayList<String> servicios;
+    private int estrellas;
+    private boolean piscina;
 
-    public Hotel(int anfitrionId, String tipo, String ubicacion, double precioNoche, int habitaciones, int banios, int maxPersonas, boolean parking, boolean petFriendly, String checkIn, String checkOut, ArrayList<String> servicios) {
+    public Hotel(int anfitrionId, String ubicacion, double precioNoche, int habitaciones, int banios, int maxPersonas, boolean parking, boolean petFriendly, String checkIn, String checkOut, int estrellas, boolean piscina) {
         super(anfitrionId, "Hotel", ubicacion, precioNoche, habitaciones, banios, maxPersonas, parking, petFriendly);
         this.checkIn = checkIn;
         this.checkOut = checkOut;
-        this.servicios = servicios;
+        this.estrellas = estrellas;
+        this.piscina = piscina;
     }
 
     public String getCheckIn() {
@@ -30,13 +30,20 @@ public class Hotel extends Propiedad {
         this.checkOut = checkOut;
     }
 
-    public ArrayList<String> getServicios() {
-        return servicios;
-    }
-
-    public void setServicios(ArrayList<String> servicios) {
-        this.servicios = servicios;
+    public int getEstrellas() {
+        return estrellas;
     }
     
+    public void setEstrellas(int estrellas) {
+        this.estrellas = estrellas;
+    }
+    
+    public boolean isPiscina() {
+        return piscina;
+    }
+
+    public void setPiscina(boolean piscina) {
+        this.piscina = piscina;
+    }
     
 }
