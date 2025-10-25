@@ -67,7 +67,7 @@ public class GestorPropiedad {
     public void agregarHotel(Hotel propiedad) {
         String sql = """
                 INSERT INTO Propiedades (tipo, ubicacion, precioNoche, anfitrionId, maxPersonas, habitaciones, banios,
-                                        parking, petFriendly, checkIn, checkOut, servicios)
+                                        parking, petFriendly, checkIn, checkOut, estrellas, piscina)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """;
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
@@ -82,6 +82,8 @@ public class GestorPropiedad {
             sentencia.setBoolean(9, propiedad.isPetFriendly());
             sentencia.setString(10, propiedad.getCheckIn());
             sentencia.setString(11, propiedad.getCheckOut());
+            sentencia.setInt(12, propiedad.getEstrellas());
+            sentencia.setBoolean(13, propiedad.isPiscina());
 
             int filas = sentencia.executeUpdate();
             System.out.println(filas == 1 ? "Propiedad agregada correctamente" : "Error al agregar propiedad");
@@ -315,10 +317,9 @@ public class GestorPropiedad {
     }
 
     public void mostrarPropiedadesPorBoolean(String dato) {
-        String sql = "SELECT * FROM Propiedades WHERE ? = 1";
+        String sql = "SELECT * FROM Propiedades WHERE " + dato + "= 1";
 
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
-            sentencia.setString(1, dato);
             ResultSet rs = sentencia.executeQuery();
 
             boolean existe = false;
