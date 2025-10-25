@@ -1,8 +1,6 @@
 package com.mycompany.nomadia;
 
 import java.sql.*;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
 public class GestorReserva {
     private Connection conn;
@@ -25,6 +23,21 @@ public class GestorReserva {
             System.out.println("Reserva agregada correctamente.");
         } catch (SQLException e) {
             System.out.println("Error al agregar reserva: " + e.getMessage());
+        }
+    }
+
+    public void eliminarReserva(int id) {
+        String sql = "DELETE FROM Reservas WHERE id = ?";
+        try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
+            sentencia.setInt(1, id);
+            int filasAfectadas = sentencia.executeUpdate();
+            if (filasAfectadas > 0) {
+                System.out.println("Reserva eliminada correctamente.");
+            } else {
+                System.out.println("No se encontró la reserva con el ID proporcionado.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al eliminar reserva: " + e.getMessage());
         }
     }
 
@@ -55,21 +68,6 @@ public class GestorReserva {
             }
         } catch (SQLException e) {
             System.out.println("Error al marcar reserva como pagada: " + e.getMessage());
-        }
-    }
-
-    public void eliminarReserva(int id) {
-        String sql = "DELETE FROM Reservas WHERE id = ?";
-        try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
-            sentencia.setInt(1, id);
-            int filasAfectadas = sentencia.executeUpdate();
-            if (filasAfectadas > 0) {
-                System.out.println("Reserva eliminada correctamente.");
-            } else {
-                System.out.println("No se encontró la reserva con el ID proporcionado.");
-            }
-        } catch (SQLException e) {
-            System.out.println("Error al eliminar reserva: " + e.getMessage());
         }
     }
 

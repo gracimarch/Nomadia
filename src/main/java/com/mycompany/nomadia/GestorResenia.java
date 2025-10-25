@@ -23,6 +23,17 @@ public class GestorResenia {
         }
     }
 
+    public void eliminarResenia(int id) {
+        String sql = "DELETE FROM Resenias WHERE id = ?";
+        try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
+            sentencia.setInt(1, id);
+            sentencia.executeUpdate();
+            System.out.println("Reseña eliminada correctamente.");
+        } catch (SQLException e) {
+            System.out.println("Error al eliminar reseña: " + e.getMessage());
+        }
+    }
+
     public void actualizarResenia(Resenia resenia, int id) {
         String sql = "UPDATE Resenias SET comentario = ?, puntaje = ? WHERE id = ?";
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
@@ -33,17 +44,6 @@ public class GestorResenia {
             System.out.println("Reseña actualizada correctamente.");
         } catch (SQLException e) {
             System.out.println("Error al actualizar reseña: " + e.getMessage());
-        }
-    }
-
-    public void eliminarResenia(int id) {
-        String sql = "DELETE FROM Resenias WHERE id = ?";
-        try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
-            sentencia.setInt(1, id);
-            sentencia.executeUpdate();
-            System.out.println("Reseña eliminada correctamente.");
-        } catch (SQLException e) {
-            System.out.println("Error al eliminar reseña: " + e.getMessage());
         }
     }
 
