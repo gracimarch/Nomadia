@@ -127,35 +127,57 @@ public class GestorPropiedad {
         }
     }
 
-    public void actualizarPropiedad(int id, String dato) {
-        String selectSql = "SELECT ? FROM Propiedades WHERE id = ?";
-        try (PreparedStatement psSelect = conn.prepareStatement(selectSql)) {
-            psSelect.setString(1, dato);
-            psSelect.setInt(2, id);
-            try (ResultSet rs = psSelect.executeQuery()) {
-                if (!rs.next()) {
-                    System.out.println("No se encontró la propiedad con el ID proporcionado");
-                    return;
-                }
+    public void actualizarPropiedad(int id, String dato, Boolean nuevo) {
+        String sql = "UPDATE Propiedades SET ? = ? WHERE id = ?";
 
-                boolean actual = rs.getBoolean(dato);
-                if (rs.wasNull())
-                    actual = false;
-                boolean nuevo = !actual;
-
-                String updateSql = "UPDATE Propiedades SET ? = ? WHERE id = ?";
-                try (PreparedStatement psUpdate = conn.prepareStatement(updateSql)) {
-                    psUpdate.setString(1, dato);
-                    psUpdate.setBoolean(2, nuevo);
-                    psUpdate.setInt(3, id);
-                    int filas = psUpdate.executeUpdate();
-                    if (filas == 1) {
-                        System.out.println("Dato actualizado correctamente");
-                    } else {
-                        System.out.println("No se pudo actualizar la propiedad.");
-                    }
-                }
+        try (PreparedStatement psUpdate = conn.prepareStatement(sql)) {
+            psUpdate.setString(1, dato);
+            psUpdate.setBoolean(2, nuevo);
+            psUpdate.setInt(3, id);
+            int filas = psUpdate.executeUpdate();
+            if (filas == 1) {
+                System.out.println("Dato actualizado correctamente");
+            } else {
+                System.out.println("No se pudo actualizar la propiedad.");
             }
+
+        } catch (SQLException e) {
+            System.out.println("Error al actualizar propiedad: " + e.getMessage());
+        }
+    }
+
+    public void actualizarPropiedad(int id, int nuevo) {
+        String sql = "UPDATE Propiedades SET estrellas = ? WHERE id = ?";
+
+        try (PreparedStatement psUpdate = conn.prepareStatement(sql)) {
+            psUpdate.setInt(1, nuevo);
+            psUpdate.setInt(2, id);
+            int filas = psUpdate.executeUpdate();
+            if (filas == 1) {
+                System.out.println("Cantidad de estrellas actualizado correctamente");
+            } else {
+                System.out.println("No se pudo actualizar la propiedad.");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al actualizar propiedad: " + e.getMessage());
+        }
+    }
+
+    public void actualizarPropiedad(int id, String dato, String nuevo) {
+        String sql = "UPDATE Propiedades SET ? = ? WHERE id = ?";
+
+        try (PreparedStatement psUpdate = conn.prepareStatement(sql)) {
+            psUpdate.setString(1, dato);
+            psUpdate.setString(2, nuevo);
+            psUpdate.setInt(3, id);
+            int filas = psUpdate.executeUpdate();
+            if (filas == 1) {
+                System.out.println("Dato actualizado correctamente");
+            } else {
+                System.out.println("No se pudo actualizar la propiedad.");
+            }
+
         } catch (SQLException e) {
             System.out.println("Error al actualizar propiedad: " + e.getMessage());
         }
@@ -373,6 +395,20 @@ public class GestorPropiedad {
             }
         } catch (SQLException e) {
             System.out.println("Error al verificar existencia de la propiedad: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean esTipoPropiedad(int id, String tipo) {
+        String sql = "SELECT 1 FROM Propiedades WHERE id = ? AND tipo = ?";
+        try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
+            sentencia.setInt(1, id);
+            sentencia.setString(2, tipo);
+            try (ResultSet rs = sentencia.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al verificar tipo de propiedad: " + e.getMessage());
             return false;
         }
     }
