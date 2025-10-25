@@ -3,60 +3,8 @@ package com.mycompany.nomadia;
 import java.sql.*;
 import java.util.Scanner;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
 public class Nomadia {
-
-    private static int leerInt(Scanner sc, String texto) {
-        while (true) {
-            System.out.print(texto);
-            String line = sc.nextLine();
-            try {
-                return Integer.parseInt(line.trim());
-            } catch (NumberFormatException e) {
-                System.out.println("Entrada inválida. Ingrese un número.");
-            }
-        }
-    }
-
-    private static double leerDouble(Scanner sc, String texto) {
-        while (true) {
-            System.out.print(texto);
-            String line = sc.nextLine();
-            try {
-                return Double.parseDouble(line.trim());
-            } catch (NumberFormatException e) {
-                System.out.println("Entrada inválida. Ingrese un número (decimal permitido).");
-            }
-        }
-    }
-
-    private static boolean leerBoolean(Scanner sc, String texto) {
-        while (true) {
-            System.out.print(texto + " (s/n): ");
-            String line = sc.nextLine().trim().toLowerCase();
-            if (line.equals("s") || line.equals("si"))
-                return true;
-            if (line.equals("n") || line.equals("no"))
-                return false;
-            System.out.println("Entrada inválida. Responda 's' o 'n'.");
-        }
-    }
-
-    private static LocalDate leerFecha(Scanner read, String prompt) {
-        LocalDate fecha = null;
-        while (fecha == null) {
-            System.out.print(prompt);
-            String line = read.nextLine().trim();
-            try {
-                fecha = LocalDate.parse(line);
-            } catch (Exception e) {
-                System.out.println("Formato inválido. Use YYYY-MM-DD.");
-            }
-        }
-        return fecha;
-    }
-
     public static void main(String[] args) {
         Connection conn = ConexionDB.getConnection();
 
@@ -83,7 +31,7 @@ public class Nomadia {
             System.out.println("3. Gestionar Reservas");
             System.out.println("4. Gestionar Reseñas");
             System.out.println("5. Salir");
-            opc1 = leerInt(read, "Seleccione una opción: ");
+            opc1 = Leer.leerInt(read, "Seleccione una opción: ");
 
             switch (opc1) {
 
@@ -95,7 +43,7 @@ public class Nomadia {
                         System.out.println("3. Eliminar Usuario");
                         System.out.println("4. Mostrar Usuarios");
                         System.out.println("5. Volver");
-                        opc2 = leerInt(read, "Seleccione una opción: ");
+                        opc2 = Leer.leerInt(read, "Seleccione una opción: ");
 
                         switch (opc2) {
                             case 1:
@@ -104,7 +52,7 @@ public class Nomadia {
                                     System.out.println("1. Agregar Inquilino");
                                     System.out.println("2. Agregar Anfitrión");
                                     System.out.println("3. Volver");
-                                    opc3 = leerInt(read, "Seleccione una opción: ");
+                                    opc3 = Leer.leerInt(read, "Seleccione una opción: ");
 
                                     switch (opc3) {
                                         case 1:
@@ -126,7 +74,7 @@ public class Nomadia {
                                 break;
 
                             case 2:
-                                int id = leerInt(read, "\nIngrese el ID del usuario que desea modificar: ");
+                                int id = Leer.leerInt(read, "\nIngrese el ID del usuario que desea modificar: ");
 
                                 if (!gestorUsuario.existeUsuario(id)) {
                                     System.out.println("No se encontró el usuario con el ID proporcionado. Volviendo al menú de usuarios.");
@@ -156,7 +104,7 @@ public class Nomadia {
                                     System.out.println(opc3TextoEspecial);
                                     System.out.println("4. Volver");
                                     
-                                    opc3 = leerInt(read, "Seleccione una opción: ");
+                                    opc3 = Leer.leerInt(read, "Seleccione una opción: ");
 
                                     switch (opc3) {
                                         case 1:
@@ -171,12 +119,10 @@ public class Nomadia {
                                             if ("ascender".equals(accionEspecial)) {
                                                 gestorUsuario.actualizarTipoUsuario(id, "InquilinoPremium");
                                                 tipoUsuario = "InquilinoPremium";
-                                                System.out.println("\nUsuario ascendido a Premium.");
                                                 
                                             } else if ("descender".equals(accionEspecial)) {
                                                 gestorUsuario.actualizarTipoUsuario(id, "Inquilino");
                                                 tipoUsuario = "Inquilino";
-                                                System.out.println("\nUsuario descendido a Inquilino.");
                                                 
                                             } else {
                                                 System.out.println("\nOpción no válida para este tipo de usuario.");
@@ -195,8 +141,7 @@ public class Nomadia {
                                 break;
 
                             case 3:
-                                int idEliminar = leerInt(read, "\nIngrese el ID del usuario que desea eliminar: ");
-                                gestorUsuario.eliminarUsuario(idEliminar);
+                                Usuario.eliminarUsuario(read, gestorUsuario);
                                 break;
 
                             case 4:
@@ -207,7 +152,7 @@ public class Nomadia {
                                     System.out.println("3. Mostrar Anfitriones");
                                     System.out.println("4. Mostrar por ID");
                                     System.out.println("5. Volver");
-                                    opc3 = leerInt(read, "Seleccione una opción: ");
+                                    opc3 = Leer.leerInt(read, "Seleccione una opción: ");
 
                                     switch (opc3) {
                                         case 1:
@@ -223,7 +168,7 @@ public class Nomadia {
                                             break;
 
                                         case 4:
-                                            int idMostrar = leerInt(read, "\nIngrese el ID del usuario que desea mostrar: ");
+                                            int idMostrar = Leer.leerInt(read, "\nIngrese el ID del usuario que desea mostrar: ");
                                             gestorUsuario.mostrarUsuarioPorId(idMostrar);
                                             break;
 
@@ -255,7 +200,7 @@ public class Nomadia {
                         System.out.println("3. Eliminar Propiedad");
                         System.out.println("4. Mostrar Propiedad");
                         System.out.println("5. Volver");
-                        opc2 = leerInt(read, "Seleccione una opción: ");
+                        opc2 = Leer.leerInt(read, "Seleccione una opción: ");
 
                         switch (opc2) {
                             case 1:
@@ -265,96 +210,18 @@ public class Nomadia {
                                     System.out.println("2. Departamento");
                                     System.out.println("3. Hotel");
                                     System.out.println("4. Volver");
-                                    opc3 = leerInt(read, "Seleccione una opción: ");
+                                    opc3 = Leer.leerInt(read, "Seleccione una opción: ");
 
                                     switch (opc3) {
-                                        case 1: {
-                                            System.out.println("\n== Agregar Casa ==");
-                                            int anfitrionId;
-                                            boolean esAnfitrion;
-                                            do {
-                                                anfitrionId = leerInt(read, "Anfitrión ID: ");
-                                                esAnfitrion = gestorUsuario.esTipoUsuario(anfitrionId,
-                                                        "Anfitrion");
-                                                if (!esAnfitrion)
-                                                    System.out.println("El ID no es de un anfitrión");
-                                            } while (!esAnfitrion);
-                                            System.out.print("Ubicación: ");
-                                            String ubicacion = read.nextLine();
-                                            double precio = leerDouble(read, "Precio por noche: ");
-                                            int habitaciones = leerInt(read, "Habitaciones (número): ");
-                                            int banios = leerInt(read, "Baños (número): ");
-                                            int maxPersonas = leerInt(read, "Máx. personas: ");
-                                            boolean parking = leerBoolean(read, "Parking disponible?");
-                                            boolean petFriendly = leerBoolean(read, "Pet friendly?");
-                                            boolean parrilla = leerBoolean(read, "Posee parrilla?");
-                                            boolean patio = leerBoolean(read, "Posee patio?");
-
-                                            Casa casa = new Casa(anfitrionId, ubicacion, precio, habitaciones, banios,
-                                                    maxPersonas, parking, petFriendly, parrilla, patio);
-                                            gestorPropiedad.agregarCasa(casa);
+                                        case 1:
+                                            Propiedad.agregarPropiedad(read, gestorPropiedad, gestorUsuario, "Casa");
                                             break;
-                                        }
-                                        case 2: {
-                                            System.out.println("\n== Agregar Departamento ==");
-                                            int anfitrionId;
-                                            boolean esAnfitrion;
-                                            do {
-                                                anfitrionId = leerInt(read, "Anfitrión ID: ");
-                                                esAnfitrion = gestorUsuario.esTipoUsuario(anfitrionId,
-                                                        "Anfitrion");
-                                                if (!esAnfitrion)
-                                                    System.out.println("El ID no es de un anfitrión");
-                                            } while (!esAnfitrion);
-                                            System.out.print("Ubicación: ");
-                                            String ubicacion = read.nextLine();
-                                            double precio = leerDouble(read, "Precio por noche: ");
-                                            int habitaciones = leerInt(read, "Habitaciones (número): ");
-                                            int banios = leerInt(read, "Baños (número): ");
-                                            int maxPersonas = leerInt(read, "Máx. personas: ");
-                                            boolean parking = leerBoolean(read, "Parking disponible?");
-                                            boolean petFriendly = leerBoolean(read, "Pet friendly?");
-                                            int piso = leerInt(read, "Piso: ");
-                                            boolean balcon = leerBoolean(read, "Posee balcón?");
-                                            boolean zonaComun = leerBoolean(read, "Posee zona común?");
-
-                                            Departamento depto = new Departamento(anfitrionId, "Departamento",
-                                                    ubicacion, precio, habitaciones, banios, maxPersonas, parking,
-                                                    petFriendly, piso, balcon, zonaComun);
-                                            gestorPropiedad.agregarDepartamento(depto);
+                                        case 2: 
+                                            Propiedad.agregarPropiedad(read, gestorPropiedad, gestorUsuario, "Departamento");
                                             break;
-                                        }
-                                        case 3: {
-                                            System.out.println("\n== Agregar Hotel ==");
-                                            int anfitrionId;
-                                            boolean esAnfitrion;
-                                            do {
-                                                anfitrionId = leerInt(read, "Anfitrión ID: ");
-                                                esAnfitrion = gestorUsuario.esTipoUsuario(anfitrionId,
-                                                        "Anfitrion");
-                                                if (!esAnfitrion)
-                                                    System.out.println("El ID no es de un anfitrión");
-                                            } while (!esAnfitrion);
-                                            System.out.print("Ubicación: ");
-                                            String ubicacion = read.nextLine();
-                                            double precio = leerDouble(read, "Precio por noche: ");
-                                            int habitaciones = leerInt(read, "Habitaciones (número): ");
-                                            int banios = leerInt(read, "Baños (número): ");
-                                            int maxPersonas = leerInt(read, "Máx. personas: ");
-                                            boolean parking = leerBoolean(read, "Parking disponible?");
-                                            boolean petFriendly = leerBoolean(read, "Pet friendly?");
-                                            System.out.print("Check-In (texto): ");
-                                            String checkIn = read.nextLine();
-                                            System.out.print("Check-Out (texto): ");
-                                            String checkOut = read.nextLine();
-                                            java.util.ArrayList<String> servicios = new java.util.ArrayList<>();
-
-                                            Hotel hotel = new Hotel(anfitrionId, "Hotel", ubicacion, precio,
-                                                    habitaciones, banios, maxPersonas, parking, petFriendly, checkIn,
-                                                    checkOut, servicios);
-                                            gestorPropiedad.agregarHotel(hotel);
+                                        case 3:
+                                            Propiedad.agregarPropiedad(read, gestorPropiedad, gestorUsuario, "Hotel");
                                             break;
-                                        }
                                         case 4:
                                             System.out.println("\nVolviendo a gestionar propiedades...");
                                             break;
@@ -365,56 +232,75 @@ public class Nomadia {
                                 break;
 
                             case 2:
-                                int idActualizar = leerInt(read,
-                                        "\nIngrese el ID de la propiedad que desea modificar: ");
-                                gestorPropiedad.mostrarPropiedadPorId(idActualizar);
+                                
+                                int id = Leer.leerInt(read,"\nIngrese el ID de la propiedad que desea modificar: ");
+
+                                if (!gestorPropiedad.existePropiedad(id)) {
+                                    System.out.println("No se encontró el usuario con el ID proporcionado. Volviendo al menú de usuarios.");
+                                    break;
+                                }
+
+                                System.out.println("\nDatos actuales del usuario:");
+                                gestorPropiedad.mostrarPropiedadPorId(id);
                                 do {
                                     System.out.println("\n¿Qué desea actualizar?");
                                     System.out.println("1. Precio por noche");
                                     System.out.println("2. Parking");
                                     System.out.println("3. PetFriendly");
-                                    System.out.println("4. Parrilla");
-                                    System.out.println("5. Patio");
-                                    System.out.println("6. Balcón");
-                                    System.out.println("7. Zona común");
-                                    System.out.println("8. Volver");
-                                    opc3 = leerInt(read, "Seleccione una opción: ");
+
+                                    if (gestorPropiedad.esTipoPropiedad(id, "Casa")) {
+                                        System.out.println("4. Parrilla");
+                                        System.out.println("5. Patio");
+                                    } else if (gestorPropiedad.esTipoPropiedad(id, "Departamento")) {
+                                        System.out.println("4. Balcón");
+                                        System.out.println("5. Zona Común");
+                                    } else if (gestorPropiedad.esTipoPropiedad(id, "Hotel")) {
+                                        System.out.println("4. Check-In/Check-Out");
+                                        System.out.println("5. Estrellas");
+                                    }
+                                    System.out.println("6. Volver");
+                                    opc3 = Leer.leerInt(read, "Seleccione una opción: ");
 
                                     switch (opc3) {
                                         case 1:
-                                            double nuevoPrecio = leerDouble(read, "Ingrese nuevo precio por noche: ");
-                                            gestorPropiedad.actualizarPropiedad(idActualizar, nuevoPrecio);
+                                            Propiedad.actualizarPropiedad(read, gestorPropiedad, id, "double", "precio");
                                             break;
                                         case 2:
-                                            gestorPropiedad.actualizarPropiedad(idActualizar, "parking");
+                                            Propiedad.actualizarPropiedad(read, gestorPropiedad, id, "boolean", "parking");
                                             break;
                                         case 3:
-                                            gestorPropiedad.actualizarPropiedad(idActualizar, "petFriendly");
+                                            Propiedad.actualizarPropiedad(read, gestorPropiedad, id, "boolean", "petFriendly");
                                             break;
                                         case 4:
-                                            gestorPropiedad.actualizarPropiedad(idActualizar, "parrilla");
+                                            if (gestorPropiedad.esTipoPropiedad(id, "Casa")) {
+                                                Propiedad.actualizarPropiedad(read, gestorPropiedad, id, "boolean", "parrilla");
+                                            } else if (gestorPropiedad.esTipoPropiedad(id, "Departamento")) {
+                                                Propiedad.actualizarPropiedad(read, gestorPropiedad, id, "boolean", "balcon");
+                                            } else if (gestorPropiedad.esTipoPropiedad(id, "Hotel")) {
+                                                Propiedad.actualizarPropiedad(read, gestorPropiedad, id, "String", "checkIn");
+                                                Propiedad.actualizarPropiedad(read, gestorPropiedad, id, "String", "checkOut");
+                                            }
                                             break;
                                         case 5:
-                                            gestorPropiedad.actualizarPropiedad(idActualizar, "patio");
+                                            if (gestorPropiedad.esTipoPropiedad(id, "Casa")) {
+                                                Propiedad.actualizarPropiedad(read, gestorPropiedad, id, "boolean", "patio");
+                                            } else if (gestorPropiedad.esTipoPropiedad(id, "Departamento")) {
+                                                Propiedad.actualizarPropiedad(read, gestorPropiedad, id, "boolean", "zonaComun");
+                                            } else if (gestorPropiedad.esTipoPropiedad(id, "Hotel")) {
+                                                Propiedad.actualizarPropiedad(read, gestorPropiedad, id, "int", "estrellas");
+                                            }
                                             break;
                                         case 6:
-                                            gestorPropiedad.actualizarPropiedad(idActualizar, "balcon");
-                                            break;
-                                        case 7:
-                                            gestorPropiedad.actualizarPropiedad(idActualizar, "zonaComun");
-                                            break;
-                                        case 8:
                                             System.out.println("\nVolviendo a gestionar propiedades...");
                                             break;
                                         default:
                                             System.out.println("Opción no válida. Intente de nuevo.");
                                     }
-                                } while (opc3 != 8);
+                                } while (opc3 != 6);
                                 break;
 
                             case 3:
-                                int idEliminar = leerInt(read, "\nIngrese el ID de la propiedad que desea eliminar: ");
-                                gestorPropiedad.eliminarPropiedad(idEliminar);
+                                Propiedad.eliminarPropiedad(read, gestorPropiedad);
                                 break;
 
                             case 4:
@@ -429,24 +315,31 @@ public class Nomadia {
                                     System.out.println("7. Por capacidad mínima");
                                     System.out.println("8. Por un adicional");
                                     System.out.println("9. Volver");
-                                    opc3 = leerInt(read, "Seleccione una opción: ");
+                                    opc3 = Leer.leerInt(read, "Seleccione una opción: ");
 
                                     switch (opc3) {
                                         case 1:
                                             gestorPropiedad.mostrarPropiedades();
                                             break;
-                                        case 2: {
-                                            int anfitrionId = leerInt(read, "Ingrese anfitrión ID: ");
+                                        case 2:
+                                            int anfitrionId = Leer.leerInt(read, "Ingrese anfitrión ID: ");
+                                            if (!gestorUsuario.existeUsuario(anfitrionId)) {
+                                                System.out.println("No se encontró el usuario con el ID proporcionado. Volviendo al menú de reservas.");
+                                                break;
+                                            }
+                                            if (!gestorUsuario.esTipoUsuario(anfitrionId, "Anfitrion")) {
+                                                System.out.println("El ID del Usuario no es anfitrión");
+                                                break;
+                                            }
                                             gestorPropiedad.mostrarPropiedadesPorAnfitrion(anfitrionId);
                                             break;
-                                        }
-                                        case 3: {
+                                        case 3:
                                             System.out.print("¿Qué tipo desea mostrar?");
                                             System.out.println("1. Casa");
                                             System.out.println("2. Departamento");
                                             System.out.println("3. Hotel");
                                             System.out.println("4. Volver");
-                                            opc4 = leerInt(read, "Seleccione una opción: ");
+                                            opc4 = Leer.leerInt(read, "Seleccione una opción: ");
                                             String tipo = null;
 
                                             switch (opc4) {
@@ -469,39 +362,34 @@ public class Nomadia {
                                             if (tipo != null)
                                                 gestorPropiedad.mostrarPropiedadesPorTipo(tipo);
                                             break;
-                                        }
-                                        case 4: {
-                                            int idMostrar = leerInt(read, "Ingrese ID de la propiedad: ");
+                                        case 4:
+                                            int idMostrar = Leer.leerInt(read, "Ingrese ID de la propiedad: ");
                                             gestorPropiedad.mostrarPropiedadPorId(idMostrar);
                                             break;
-                                        }
-                                        case 5: {
+                                        case 5:
                                             System.out.print("Ingrese ubicación (texto o parte): ");
                                             String ubic = read.nextLine();
                                             gestorPropiedad.mostrarPropiedadesPorUbicacion(ubic);
                                             break;
-                                        }
-                                        case 6: {
-                                            double precioMax = leerDouble(read, "Ingrese precio máximo: ");
+                                        case 6:
+                                            double precioMax = Leer.leerDouble(read, "Ingrese precio máximo: ");
                                             gestorPropiedad.mostrarPropiedadesPorPrecioMaximo(precioMax);
                                             break;
-                                        }
-                                        case 7: {
-                                            int capacidad = leerInt(read, "Ingrese capacidad mínima (personas): ");
+                                        case 7:
+                                            int capacidad = Leer.leerInt(read, "Ingrese capacidad mínima (personas): ");
                                             gestorPropiedad.mostrarPropiedadesPorCapacidad(capacidad);
                                             break;
-                                        }
-                                        case 8: {
+                                        case 8:
                                             System.out.println("Seleccione el adicional por el que desea filtrar:");
                                             System.out.println("1. Parking");
-                                            System.out.println("2. Apto Mascotas (petFriendly)");
+                                            System.out.println("2. PetFriendly");
                                             System.out.println("3. Parrilla");
                                             System.out.println("4. Patio");
                                             System.out.println("5. Balcón");
                                             System.out.println("6. Zona Común");
                                             System.out.println("7. Volver");
 
-                                            opc4 = leerInt(read, "Seleccione una opción: ");
+                                            opc4 = Leer.leerInt(read, "Seleccione una opción: ");
                                             String campo = null;
 
                                             switch (opc4) {
@@ -533,7 +421,6 @@ public class Nomadia {
                                             if (campo != null)
                                                 gestorPropiedad.mostrarPropiedadesPorBoolean(campo);
                                             break;
-                                        }
                                         case 9:
                                             System.out.println("\nVolviendo a gestionar propiedades...");
                                             break;
@@ -563,13 +450,13 @@ public class Nomadia {
                         System.out.println("4. Eliminar Reserva");
                         System.out.println("5. Mostrar Reservas");
                         System.out.println("6. Volver");
-                        opc2 = leerInt(read, "Seleccione una opción: ");
+                        opc2 = Leer.leerInt(read, "Seleccione una opción: ");
 
                         switch (opc2) {
                             case 1: {
                                 System.out.println("\n== Agregar Reserva ==");
 
-                                int propiedadId = leerInt(read, "Propiedad ID: ");
+                                int propiedadId = Leer.leerInt(read, "Propiedad ID: ");
                                 if (!gestorPropiedad.existePropiedad(propiedadId)) {
                                     System.out.println("No se encontró la propiedad con el ID proporcionado. Volviendo al menú de reservas.");
                                     break;
@@ -581,7 +468,7 @@ public class Nomadia {
                                     break;
                                 }
 
-                                int inquilinoId = leerInt(read, "Inquilino ID: ");
+                                int inquilinoId = Leer.leerInt(read, "Inquilino ID: ");
                                 if (!gestorUsuario.existeUsuario(inquilinoId)) {
                                     System.out.println("No se encontró el usuario con el ID proporcionado. Volviendo al menú de reservas.");
                                     break;
@@ -591,12 +478,12 @@ public class Nomadia {
                                     break;
                                 }
 
-                                LocalDate fechaInicio = leerFecha(read, "Fecha inicio (YYYY-MM-DD): ");
+                                LocalDate fechaInicio = Leer.leerFecha(read, "Fecha inicio (YYYY-MM-DD): ");
 
                                 LocalDate fechaFin = null;
 
                                 while (fechaFin == null) {
-                                    fechaFin = leerFecha(read, "Fecha fin (YYYY-MM-DD): ");
+                                    fechaFin = Leer.leerFecha(read, "Fecha fin (YYYY-MM-DD): ");
                                     
                                     if (fechaFin != null && (fechaFin.isBefore(fechaInicio) || fechaFin.equals(fechaInicio))) {
                                         System.out.println("La fecha de fin debe ser posterior a la fecha de inicio.");
@@ -604,7 +491,7 @@ public class Nomadia {
                                     }
                                 }
 
-                                int cantidadPersonas = leerInt(read, "Cantidad de personas: ");
+                                int cantidadPersonas = Leer.leerInt(read, "Cantidad de personas: ");
                                 boolean pagado = false;
 
                                 Reserva nueva = new Reserva(propiedadId, inquilinoId, fechaInicio, fechaFin, 
@@ -615,14 +502,14 @@ public class Nomadia {
                             }
 
                             case 2: {
-                                int idActualizar = leerInt(read, "\nIngrese el ID de la reserva que desea modificar: ");
-                                if (!gestorReserva.existeReserva(idActualizar)) {
+                                int id = Leer.leerInt(read, "\nIngrese el ID de la reserva que desea modificar: ");
+                                if (!gestorReserva.existeReserva(id)) {
                                     System.out.println(
                                             "No se encontró la reserva con el ID proporcionado. Volviendo al menú de reservas.");
                                     break;
                                 }
                                 System.out.println("Datos actuales:");
-                                gestorReserva.mostrarReservasPorId(idActualizar);
+                                gestorReserva.mostrarReservasPorId(id);
 
                                 int opcionModificar = 0;
                                 do {
@@ -630,7 +517,7 @@ public class Nomadia {
                                     System.out.println("1. Fechas (inicio y/o fin)");
                                     System.out.println("2. Cantidad de personas");
                                     System.out.println("3. Volver");
-                                    opcionModificar = leerInt(read, "Seleccione una opción: ");
+                                    opcionModificar = Leer.leerInt(read, "Seleccione una opción: ");
                                     /*
                                     switch (opcionModificar) {
                                         case 1: {
@@ -639,7 +526,7 @@ public class Nomadia {
                                             int cantidadActual = 1;
                                             String sql = "SELECT propiedadId, cantidadPersonas FROM Reservas WHERE id = ?";
                                             try (PreparedStatement ps = conn.prepareStatement(sql)) {
-                                                ps.setInt(1, idActualizar);
+                                                ps.setInt(1, id);
                                                 try (ResultSet rs = ps.executeQuery()) {
                                                     if (rs.next()) {
                                                         propiedadId = rs.getInt("propiedadId");
@@ -697,7 +584,7 @@ public class Nomadia {
                                                     new java.util.Date(nuevaFechaInicio.getTime()),
                                                     new java.util.Date(nuevaFechaFin.getTime()), precioFinal,
                                                     cantidadActual, false);
-                                            gestorReserva.actualizarReserva(actualizadaFechas, idActualizar);
+                                            gestorReserva.actualizarReserva(actualizadaFechas, id);
                                             break;
                                         }
 
@@ -708,7 +595,7 @@ public class Nomadia {
                                             java.sql.Date fechaFinAct = null;
                                             String sql = "SELECT propiedadId, fechaInicio, fechaFin FROM Reservas WHERE id = ?";
                                             try (PreparedStatement ps = conn.prepareStatement(sql)) {
-                                                ps.setInt(1, idActualizar);
+                                                ps.setInt(1, id);
                                                 try (ResultSet rs = ps.executeQuery()) {
                                                     if (rs.next()) {
                                                         propiedadId = rs.getInt("propiedadId");
@@ -722,7 +609,7 @@ public class Nomadia {
                                                 break;
                                             }
 
-                                            int nuevaCant = leerInt(read, "Nueva cantidad de personas: ");
+                                            int nuevaCant = Leer.leerInt(read, "Nueva cantidad de personas: ");
 
                                             double precioNoche = gestorPropiedad.obtenerPrecioNoche(propiedadId);
                                             if (precioNoche <= 0 || fechaInicioAct == null || fechaFinAct == null) {
@@ -740,7 +627,7 @@ public class Nomadia {
                                                     new java.util.Date(fechaInicioAct.getTime()),
                                                     new java.util.Date(fechaFinAct.getTime()), precioFinal, nuevaCant,
                                                     false);
-                                            gestorReserva.actualizarReserva(actualizadaCant, idActualizar);
+                                            gestorReserva.actualizarReserva(actualizadaCant, id);
                                             break;
                                         }
                                         case 3:
@@ -756,13 +643,13 @@ public class Nomadia {
                             }
 
                             case 3: {
-                                int idPagar = leerInt(read, "\nIngrese el ID de la reserva a marcar como pagada: ");
+                                int idPagar = Leer.leerInt(read, "\nIngrese el ID de la reserva a marcar como pagada: ");
                                 gestorReserva.marcarReservaComoPagada(idPagar);
                                 break;
                             }
 
                             case 4: {
-                                int idEliminar = leerInt(read, "\nIngrese el ID de la reserva que desea eliminar: ");
+                                int idEliminar = Leer.leerInt(read, "\nIngrese el ID de la reserva que desea eliminar: ");
                                 gestorReserva.eliminarReserva(idEliminar);
                                 break;
                             }
@@ -774,14 +661,14 @@ public class Nomadia {
                                     System.out.println("2. Mostrar por ID");
                                     System.out.println("3. Mostrar por Inquilino");
                                     System.out.println("4. Volver");
-                                    opc3 = leerInt(read, "Seleccione una opción: ");
+                                    opc3 = Leer.leerInt(read, "Seleccione una opción: ");
 
                                     switch (opc3) {
                                         case 1:
                                             gestorReserva.mostrarReservas();
                                             break;
                                         case 2: {
-                                            int idMostrar = leerInt(read, "Ingrese ID de la reserva: ");
+                                            int idMostrar = Leer.leerInt(read, "Ingrese ID de la reserva: ");
                                             if (!gestorPropiedad.existePropiedad(idMostrar)) {
                                                 System.out.println(
                                                         "No se encontró la reserva con el ID proporcionado. Volviendo...");
@@ -791,7 +678,7 @@ public class Nomadia {
                                             break;
                                         }
                                         case 3: {
-                                            int inqId = leerInt(read, "Ingrese ID del inquilino: ");
+                                            int inqId = Leer.leerInt(read, "Ingrese ID del inquilino: ");
                                             if (!gestorUsuario.existeUsuario(inqId)) {
                                                 System.out.println(
                                                         "No se encontró el usuario con el ID proporcionado. Volviendo al menú de reservas.");
@@ -832,19 +719,19 @@ public class Nomadia {
                         System.out.println("3. Eliminar Reseña");
                         System.out.println("4. Mostrar Reseñas");
                         System.out.println("5. Volver");
-                        opc2 = leerInt(read, "Seleccione una opción: ");
+                        opc2 = Leer.leerInt(read, "Seleccione una opción: ");
 
                         switch (opc2) {
                             case 1: {
                                 System.out.println("\n== Agregar Reseña ==");
-                                int propiedadId = leerInt(read, "Propiedad ID: ");
+                                int propiedadId = Leer.leerInt(read, "Propiedad ID: ");
                                 if (!gestorPropiedad.existePropiedad(propiedadId)) {
                                     System.out.println(
                                             "No se encontró la propiedad con el ID proporcionado. Volviendo al menú de reseñas.");
                                     break;
                                 }
 
-                                int inquilinoId = leerInt(read, "Inquilino ID: ");
+                                int inquilinoId = Leer.leerInt(read, "Inquilino ID: ");
                                 if (!gestorUsuario.existeUsuario(inquilinoId)) {
                                     System.out.println(
                                             "No se encontró el usuario con el ID proporcionado. Volviendo al menú de reseñas.");
@@ -857,7 +744,7 @@ public class Nomadia {
 
                                 System.out.print("Comentario: ");
                                 String comentario = read.nextLine();
-                                int puntaje = leerInt(read, "Puntaje (enteros): ");
+                                int puntaje = Leer.leerInt(read, "Puntaje (enteros): ");
 
                                 Resenia resenia = new Resenia(propiedadId, inquilinoId, comentario, puntaje);
                                 gestorResenia.agregarResenia(resenia);
@@ -865,8 +752,8 @@ public class Nomadia {
                             }
 
                             case 2: {
-                                int idActualizar = leerInt(read, "\nIngrese el ID de la reseña que desea modificar: ");
-                                if (!gestorResenia.existeResenia(idActualizar)) {
+                                int id = Leer.leerInt(read, "\nIngrese el ID de la reseña que desea modificar: ");
+                                if (!gestorResenia.existeResenia(id)) {
                                     System.out.println(
                                             "No se encontró la reseña con el ID proporcionado. Volviendo al menú de reseñas.");
                                     break;
@@ -875,15 +762,15 @@ public class Nomadia {
                                 System.out.println("Ingrese los nuevos datos:");
                                 System.out.print("Nuevo comentario: ");
                                 String comentarioNuevo = read.nextLine();
-                                int puntajeNuevo = leerInt(read, "Nuevo puntaje (enteros): ");
+                                int puntajeNuevo = Leer.leerInt(read, "Nuevo puntaje (enteros): ");
 
                                 Resenia actualizada = new Resenia(0, 0, comentarioNuevo, puntajeNuevo);
-                                gestorResenia.actualizarResenia(actualizada, idActualizar);
+                                gestorResenia.actualizarResenia(actualizada, id);
                                 break;
                             }
 
                             case 3: {
-                                int idEliminar = leerInt(read, "\nIngrese el ID de la reseña que desea eliminar: ");
+                                int idEliminar = Leer.leerInt(read, "\nIngrese el ID de la reseña que desea eliminar: ");
                                 gestorResenia.eliminarResenia(idEliminar);
                                 break;
                             }
@@ -895,14 +782,14 @@ public class Nomadia {
                                     System.out.println("2. Mostrar por Propiedad");
                                     System.out.println("3. Mostrar por Inquilino");
                                     System.out.println("4. Volver");
-                                    opc3 = leerInt(read, "Seleccione una opción: ");
+                                    opc3 = Leer.leerInt(read, "Seleccione una opción: ");
 
                                     switch (opc3) {
                                         case 1:
                                             gestorResenia.mostrarResenias();
                                             break;
                                         case 2: {
-                                            int propiedadId = leerInt(read, "Ingrese ID de la propiedad: ");
+                                            int propiedadId = Leer.leerInt(read, "Ingrese ID de la propiedad: ");
                                             if (gestorPropiedad.existePropiedad(propiedadId)) {
                                                 gestorResenia.mostrarReseniasPorPropiedad(propiedadId);
                                             } else {
@@ -912,7 +799,7 @@ public class Nomadia {
                                             break;
                                         }
                                         case 3: {
-                                            int inquilinoId = leerInt(read, "Ingrese ID del inquilino: ");
+                                            int inquilinoId = Leer.leerInt(read, "Ingrese ID del inquilino: ");
                                             gestorResenia.mostrarReseniasPorInquilino(inquilinoId);
                                             if (gestorUsuario.existeUsuario(inquilinoId)) {
                                                 gestorResenia.mostrarReseniasPorInquilino(inquilinoId);
