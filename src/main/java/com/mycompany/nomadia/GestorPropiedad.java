@@ -336,7 +336,10 @@ public class GestorPropiedad {
 
     public void imprimirDatos(ResultSet rs) {
         try {
-            System.out.println("\n========== Propiedad " + rs.getInt("id") + " ==========");
+            GestorResenia gestorResenia = new GestorResenia(conn);
+            int idPropiedad = rs.getInt("id");
+            
+            System.out.println("\n========== Propiedad " + idPropiedad + " ==========");
             System.out.println("Tipo: " + rs.getString("tipo"));
             System.out.println("Ubicación: " + rs.getString("ubicacion"));
             System.out.println("Precio/Noche: $" + rs.getDouble("precioNoche"));
@@ -364,9 +367,9 @@ public class GestorPropiedad {
             if (checkOut != null)
                 System.out.println("Check-Out: " + checkOut);
 
-            String servicios = rs.getString("servicios");
-            if (servicios != null)
-                System.out.println("Servicios: " + servicios);
+            int estrellas = rs.getInt("estrellas");
+            if (!rs.wasNull())
+                System.out.println("Estrellas: " + estrellas);
 
             if (rs.getBoolean("parking"))
                 System.out.println("Parking disponible");
@@ -380,6 +383,10 @@ public class GestorPropiedad {
                 System.out.println("Balcón");
             if (rs.getBoolean("zonaComun"))
                 System.out.println("Zona Común");
+            if (rs.getBoolean("piscina"))
+                System.out.println("Piscina");
+
+            System.out.println("Calificación promedio: " + gestorResenia.calcularPuntajePromedio(idPropiedad));
             System.out.println("=================================");
         } catch (SQLException e) {
             System.out.println("Error al imprimir datos de la propiedad: " + e.getMessage());
@@ -446,5 +453,5 @@ public class GestorPropiedad {
         }
         return maxPersonas;
     }
-    
+
 }

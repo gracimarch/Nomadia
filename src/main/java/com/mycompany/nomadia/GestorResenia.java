@@ -34,19 +34,6 @@ public class GestorResenia {
         }
     }
 
-    public void actualizarResenia(Resenia resenia, int id) {
-        String sql = "UPDATE Resenias SET comentario = ?, puntaje = ? WHERE id = ?";
-        try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
-            sentencia.setString(1, resenia.getComentario());
-            sentencia.setInt(2, resenia.getPuntaje());
-            sentencia.setInt(3, id);
-            sentencia.executeUpdate();
-            System.out.println("Reseña actualizada correctamente.");
-        } catch (SQLException e) {
-            System.out.println("Error al actualizar reseña: " + e.getMessage());
-        }
-    }
-
     public void mostrarResenias() {
         String sql = "SELECT * FROM Resenias";
         try (Statement sentencia = conn.createStatement();
@@ -67,10 +54,26 @@ public class GestorResenia {
                 while (rs.next()) {
                     imprimirDatosResenia(rs);
                 }
+                System.out.println("\nCalificación promedio: " + calcularPuntajePromedio(propiedadId));
             }
         } catch (SQLException e) {
             System.out.println("Error al mostrar reseñas por propiedad: " + e.getMessage());
         }
+    }
+
+    public double calcularPuntajePromedio(int propiedadId) {
+        String sql = "SELECT AVG(puntaje) AS promedio FROM Resenias WHERE propiedadId = ?";
+        try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
+            sentencia.setInt(1, propiedadId);
+            try (ResultSet rs = sentencia.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getDouble("promedio");
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al calcular puntaje promedio: " + e.getMessage());
+        }
+        return 0.0;
     }
 
     public void mostrarReseniasPorInquilino(int inquilinoId) {

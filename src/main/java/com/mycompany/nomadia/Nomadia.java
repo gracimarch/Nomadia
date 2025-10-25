@@ -622,67 +622,21 @@ public class Nomadia {
                     do {
                         System.out.println("\n¿Qué desea hacer con Reseñas?");
                         System.out.println("1. Agregar Reseña");
-                        System.out.println("2. Actualizar Reseña");
-                        System.out.println("3. Eliminar Reseña");
-                        System.out.println("4. Mostrar Reseñas");
-                        System.out.println("5. Volver");
+                        System.out.println("2. Eliminar Reseña");
+                        System.out.println("3. Mostrar Reseñas");
+                        System.out.println("4. Volver");
                         opc2 = Leer.leerInt(read, "Seleccione una opción: ");
 
                         switch (opc2) {
-                            case 1: {
-                                System.out.println("\n== Agregar Reseña ==");
-                                int propiedadId = Leer.leerInt(read, "Propiedad ID: ");
-                                if (!gestorPropiedad.existePropiedad(propiedadId)) {
-                                    System.out.println(
-                                            "No se encontró la propiedad con el ID proporcionado. Volviendo al menú de reseñas.");
-                                    break;
-                                }
-
-                                int inquilinoId = Leer.leerInt(read, "Inquilino ID: ");
-                                if (!gestorUsuario.existeUsuario(inquilinoId)) {
-                                    System.out.println(
-                                            "No se encontró el usuario con el ID proporcionado. Volviendo al menú de reseñas.");
-                                    break;
-                                }
-                                if (gestorUsuario.esTipoUsuario(inquilinoId, "Anfitrion")) {
-                                    System.out.println("El id del Usuario no es inquilino");
-                                    break;
-                                }
-
-                                System.out.print("Comentario: ");
-                                String comentario = read.nextLine();
-                                int puntaje = Leer.leerInt(read, "Puntaje (enteros): ");
-
-                                Resenia resenia = new Resenia(propiedadId, inquilinoId, comentario, puntaje);
-                                gestorResenia.agregarResenia(resenia);
+                            case 1:
+                                Resenia.crearResenia(read, gestorPropiedad, gestorUsuario, gestorResenia);
                                 break;
-                            }
 
-                            case 2: {
-                                int id = Leer.leerInt(read, "\nIngrese el ID de la reseña que desea modificar: ");
-                                if (!gestorResenia.existeResenia(id)) {
-                                    System.out.println(
-                                            "No se encontró la reseña con el ID proporcionado. Volviendo al menú de reseñas.");
-                                    break;
-                                }
-
-                                System.out.println("Ingrese los nuevos datos:");
-                                System.out.print("Nuevo comentario: ");
-                                String comentarioNuevo = read.nextLine();
-                                int puntajeNuevo = Leer.leerInt(read, "Nuevo puntaje (enteros): ");
-
-                                Resenia actualizada = new Resenia(0, 0, comentarioNuevo, puntajeNuevo);
-                                gestorResenia.actualizarResenia(actualizada, id);
+                            case 2:
+                                Resenia.eliminarResenia(read, gestorResenia);
                                 break;
-                            }
 
-                            case 3: {
-                                int idEliminar = Leer.leerInt(read, "\nIngrese el ID de la reseña que desea eliminar: ");
-                                gestorResenia.eliminarResenia(idEliminar);
-                                break;
-                            }
-
-                            case 4: {
+                            case 3:
                                 do {
                                     System.out.println("\n¿Qué desea mostrar?");
                                     System.out.println("1. Mostrar todas");
@@ -700,8 +654,7 @@ public class Nomadia {
                                             if (gestorPropiedad.existePropiedad(propiedadId)) {
                                                 gestorResenia.mostrarReseniasPorPropiedad(propiedadId);
                                             } else {
-                                                System.out
-                                                        .println("No se encontró la propiedad con el ID proporcionado");
+                                                System.out.println("No se encontró la propiedad con el ID proporcionado");
                                             }
                                             break;
                                         }
@@ -723,16 +676,15 @@ public class Nomadia {
                                     }
                                 } while (opc3 != 4);
                                 break;
-                            }
 
-                            case 5:
+                            case 4:
                                 System.out.println("\nVolviendo a menú principal...");
                                 break;
 
                             default:
                                 System.out.println("\nOpción no válida. Intente de nuevo.");
                         }
-                    } while (opc2 != 5);
+                    } while (opc2 != 4);
                     break;
                 case 5:
                     System.out.println("\nSaliendo del programa...");
