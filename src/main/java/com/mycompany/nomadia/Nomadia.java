@@ -60,7 +60,7 @@ public class Nomadia {
     public static void main(String[] args) {
         GestorUsuario gestorUsuario = new GestorUsuario();
         GestorPropiedad gestorPropiedad = new GestorPropiedad();
-        GestorResenias gestorResenias = new GestorResenias();
+        GestorResenia gestorResenia = new GestorResenia();
         GestorReserva gestorReserva = new GestorReserva();
 
         Scanner read = new Scanner(System.in);
@@ -853,13 +853,13 @@ public class Nomadia {
                                 int puntaje = leerInt(read, "Puntaje (enteros): ");
 
                                 Resenia resenia = new Resenia(propiedadId, inquilinoId, comentario, puntaje);
-                                gestorResenias.agregarResenia(resenia);
+                                gestorResenia.agregarResenia(resenia);
                                 break;
                             }
 
                             case 2: {
                                 int idActualizar = leerInt(read, "\nIngrese el ID de la reseña que desea modificar: ");
-                                if (!gestorResenias.existeResenia(idActualizar)) {
+                                if (!gestorResenia.existeResenia(idActualizar)) {
                                     System.out.println(
                                             "No se encontró la reseña con el ID proporcionado. Volviendo al menú de reseñas.");
                                     break;
@@ -871,13 +871,13 @@ public class Nomadia {
                                 int puntajeNuevo = leerInt(read, "Nuevo puntaje (enteros): ");
 
                                 Resenia actualizada = new Resenia(0, 0, comentarioNuevo, puntajeNuevo);
-                                gestorResenias.actualizarResenia(actualizada, idActualizar);
+                                gestorResenia.actualizarResenia(actualizada, idActualizar);
                                 break;
                             }
 
                             case 3: {
                                 int idEliminar = leerInt(read, "\nIngrese el ID de la reseña que desea eliminar: ");
-                                gestorResenias.eliminarResenia(idEliminar);
+                                gestorResenia.eliminarResenia(idEliminar);
                                 break;
                             }
 
@@ -892,12 +892,12 @@ public class Nomadia {
 
                                     switch (opc3) {
                                         case 1:
-                                            gestorResenias.mostrarResenias();
+                                            gestorResenia.mostrarResenias();
                                             break;
                                         case 2: {
                                             int propiedadId = leerInt(read, "Ingrese ID de la propiedad: ");
                                             if (gestorPropiedad.existePropiedad(propiedadId)) {
-                                                gestorResenias.mostrarReseniasPorPropiedad(propiedadId);
+                                                gestorResenia.mostrarReseniasPorPropiedad(propiedadId);
                                             } else {
                                                 System.out
                                                         .println("No se encontró la propiedad con el ID proporcionado");
@@ -906,9 +906,9 @@ public class Nomadia {
                                         }
                                         case 3: {
                                             int inquilinoId = leerInt(read, "Ingrese ID del inquilino: ");
-                                            gestorResenias.mostrarReseniasPorInquilino(inquilinoId);
+                                            gestorResenia.mostrarReseniasPorInquilino(inquilinoId);
                                             if (gestorUsuario.existeUsuario(inquilinoId)) {
-                                                gestorResenias.mostrarReseniasPorInquilino(inquilinoId);
+                                                gestorResenia.mostrarReseniasPorInquilino(inquilinoId);
                                             } else {
                                                 System.out.println("No se encontró el usuario con el ID proporcionado");
                                             }
