@@ -5,7 +5,7 @@ import java.sql.*;
 public class GestorPropiedad {
     private Connection conn;
 
-    public GestorPropiedad() {
+    public GestorPropiedad(Connection conn) {
         this.conn = conn;
     }
 
@@ -314,7 +314,7 @@ public class GestorPropiedad {
 
     public void imprimirDatos(ResultSet rs) {
         try {
-            System.out.println("========== Propiedad " + rs.getInt("id") + " ==========");
+            System.out.println("\n========== Propiedad " + rs.getInt("id") + " ==========");
             System.out.println("Tipo: " + rs.getString("tipo"));
             System.out.println("Ubicación: " + rs.getString("ubicacion"));
             System.out.println("Precio/Noche: $" + rs.getDouble("precioNoche"));
@@ -358,7 +358,7 @@ public class GestorPropiedad {
                 System.out.println("Balcón");
             if (rs.getBoolean("zonaComun"))
                 System.out.println("Zona Común");
-            System.out.println("=================================\n");
+            System.out.println("=================================");
         } catch (SQLException e) {
             System.out.println("Error al imprimir datos de la propiedad: " + e.getMessage());
         }

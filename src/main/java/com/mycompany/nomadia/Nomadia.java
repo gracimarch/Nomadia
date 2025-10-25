@@ -58,10 +58,17 @@ public class Nomadia {
     }
 
     public static void main(String[] args) {
-        GestorUsuario gestorUsuario = new GestorUsuario();
-        GestorPropiedad gestorPropiedad = new GestorPropiedad();
-        GestorResenia gestorResenia = new GestorResenia();
-        GestorReserva gestorReserva = new GestorReserva();
+        Connection conn = ConexionDB.getConnection();
+
+        if (conn == null) {
+            System.out.println("No se pudo conectar a la base de datos. Saliendo.");
+            return;
+        }
+
+        GestorUsuario gestorUsuario = new GestorUsuario(conn);
+        GestorPropiedad gestorPropiedad = new GestorPropiedad(conn);
+        GestorResenia gestorResenia = new GestorResenia(conn);
+        GestorReserva gestorReserva = new GestorReserva(conn);
 
         Scanner read = new Scanner(System.in);
         int opc1 = 0;

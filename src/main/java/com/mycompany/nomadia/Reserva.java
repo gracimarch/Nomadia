@@ -82,12 +82,10 @@ public class Reserva {
     
     public double calcularPrecio(double precioNoche) { 
     
-    long noches = ChronoUnit.DAYS.between(this.fechaInicio, this.fechaFin);
-
-    this.precioFinal = precioNoche * noches; 
-    
-    System.out.println("Precio final calculado: $" + String.format("%.2f", this.precioFinal));
-    
-    return this.precioFinal;
+        long noches = ChronoUnit.DAYS.between(this.fechaInicio, this.fechaFin);
+        this.precioFinal = precioNoche * noches; 
+        System.out.println("Precio final calculado: $" + String.format("%.2f", this.precioFinal));
+        
+        return this.precioFinal;
     }
 }
