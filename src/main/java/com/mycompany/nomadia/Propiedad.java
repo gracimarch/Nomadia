@@ -149,7 +149,7 @@ public abstract class Propiedad {
             String checkIn = read.nextLine();
             System.out.print("Check-Out: ");
             String checkOut = read.nextLine();
-            int estrellas = Leer.leerInt(read, "Cantidad de estrellas: ");
+            int estrellas = Leer.leerEstrellas(read, "Cantidad de estrellas: ");
             boolean piscina = Leer.leerBoolean(read, "Posee piscina? ");
             Hotel hotel = new Hotel(anfitrionId, ubicacion, precio,
                 habitaciones, banios, maxPersonas, parking, petFriendly,
