@@ -51,17 +51,14 @@ public class GestorUsuario {
     }
 
     public void actualizarTipoUsuario(int id, String nuevoTipo) {
-        // actualiza tipo y el campo descuento según el tipo
         String sql = "UPDATE Usuarios SET tipo = ?, descuento = ? WHERE id = ?";
 
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
             sentencia.setString(1, nuevoTipo);
 
             if ("InquilinoPremium".equals(nuevoTipo)) {
-                // poner el descuento (ej. 0.2) al ascender
                 sentencia.setDouble(2, 0.2);
             } else {
-                // dejar NULL cuando no es premium
                 sentencia.setNull(2, Types.DOUBLE);
             }
 
@@ -80,41 +77,23 @@ public class GestorUsuario {
         }
     }
 
-    public void actualizarEmail(int id, String nuevoEmail) {
-        String sql = "UPDATE Usuarios SET email = ? WHERE id = ?";
+    public void actualizarUsuario(int id, String dato, String nuevo) {
+        String sql = "UPDATE Usuarios SET ? = ? WHERE id = ?";
 
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
-            sentencia.setString(1, nuevoEmail);
-            sentencia.setInt(2, id);
+            sentencia.setString(1, dato);
+            sentencia.setString(2, nuevo);
+            sentencia.setInt(3, id);
 
             int registrosModificados = sentencia.executeUpdate();
 
             if (registrosModificados == 1) {
-                System.out.println("Email actualizado correctamente");
+                System.out.println("Dato actualizado correctamente");
             } else {
                 System.out.println("No se encontró el usuario con el ID proporcionado");
             }
         } catch (SQLException e) {
             System.out.println("Error al actualizar email: " + e.getMessage());
-        }
-    }
-
-    public void actualizarTelefono(int id, String nuevoTelefono) {
-        String sql = "UPDATE Usuarios SET telefono = ? WHERE id = ?";
-
-        try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
-            sentencia.setString(1, nuevoTelefono);
-            sentencia.setInt(2, id);
-
-            int registrosModificados = sentencia.executeUpdate();
-
-            if (registrosModificados == 1) {
-                System.out.println("Teléfono actualizado correctamente");
-            } else {
-                System.out.println("No se encontró el usuario con el ID proporcionado");
-            }
-        } catch (SQLException e) {
-            System.out.println("Error al actualizar teléfono: " + e.getMessage());
         }
     }
 
@@ -208,6 +187,23 @@ public class GestorUsuario {
             System.out.println("Error al verificar tipo de usuario: " + e.getMessage());
             return false;
         }
+    }
+
+    public String obtenerTipoUsuario(int inquilinoId) {
+        String sql = "SELECT tipo FROM Usuarios WHERE id = ?";
+        String tipo = "";
+
+        try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
+            sentencia.setInt(1, inquilinoId);
+            ResultSet rs = sentencia.executeQuery();
+
+            if (rs.next()) {
+                tipo = rs.getString("tipo");
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al obtener tipo: " + e.getMessage());
+        }
+        return tipo;
     }
 
 }
