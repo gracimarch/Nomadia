@@ -128,8 +128,8 @@ public class GestorReserva {
             System.out.println("=========== Reserva " + rs.getInt("id") + " ===========");
             System.out.println("Propiedad ID: " + rs.getInt("propiedadId"));
             System.out.println("Inquilino ID: " + rs.getInt("inquilinoId"));
-            System.out.println("Fecha Inicio: " + rs.getDate("fechaInicio"));
-            System.out.println("Fecha Fin: " + rs.getDate("fechaFin"));
+            System.out.println("Fecha Inicio: " + rs.getObject("fechaInicio"));
+            System.out.println("Fecha Fin: " + rs.getObject("fechaFin"));
             System.out.println("Precio Final: $" + rs.getDouble("precioFinal"));
             System.out.println("Cantidad de Personas: " + rs.getInt("cantidadPersonas"));
             System.out.println("Pagado: " + (rs.getBoolean("pagado") ? "Sí" : "No"));
