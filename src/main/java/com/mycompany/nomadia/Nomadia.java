@@ -479,24 +479,11 @@ public class Nomadia {
 
                                     switch (opc3) {
                                         case 1:
-                                            LocalDate nuevaFechaInicio = Leer.leerFecha(read, "Nueva fecha inicio (YYYY-MM-DD): ");
-                                            LocalDate nuevaFechaFin = Reserva.esFechaValida(read, nuevaFechaInicio);
-
-                                            double precioNoche = gestorPropiedad.obtenerPrecioNoche(propiedadId);
-                                            if (precioNoche <= 0) {
-                                                System.out.println("Error: No se pudo obtener el precio por noche o es inválido. No se actualizó la reserva.");
-                                                break;
-                                            }
-
-                                            double precioFinal = Reserva.calcularPrecio(precioNoche, nuevaFechaInicio, nuevaFechaFin);
-
-                                            gestorReserva.actualizarReserva(id, nuevaFechaInicio, nuevaFechaFin, precioFinal);
+                                            Reserva.actualizarReserva(read, gestorReserva, gestorPropiedad, id, propiedadId, "fecha");
                                             break;
 
                                         case 2:
-                                            int nuevaCant = Reserva.leerCantidadPersonasValida(read, gestorPropiedad, propiedadId);
-
-                                            gestorReserva.actualizarReserva(id, nuevaCant);
+                                            Reserva.actualizarReserva(read, gestorReserva, gestorPropiedad, id, propiedadId, "cantidadPersonas");
                                             break;
                                         case 3:
                                             System.out.println("Volviendo...");

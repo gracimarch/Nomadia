@@ -13,18 +13,18 @@ public class Reserva {
     private int cantidadPersonas;
     private boolean pagado;
 
-    public Reserva(int propiedadId, int inquilinoId, LocalDate fechaInicio, LocalDate fechaFin, 
-                   double precioFinal, int cantidadPersonas, boolean pagado) {
-        
+    public Reserva(int propiedadId, int inquilinoId, LocalDate fechaInicio, LocalDate fechaFin,
+            double precioFinal, int cantidadPersonas, boolean pagado) {
+
         this.propiedadId = propiedadId;
         this.inquilinoId = inquilinoId;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
         this.cantidadPersonas = cantidadPersonas;
         this.pagado = pagado;
-        this.precioFinal = precioFinal; 
+        this.precioFinal = precioFinal;
     }
-    
+
     public LocalDate getFechaInicio() {
         return fechaInicio;
     }
@@ -80,7 +80,7 @@ public class Reserva {
     public void setPagado(boolean pagado) {
         this.pagado = pagado;
     }
-    
+
     public static long getDuracionReserva(LocalDate fechaInicio, LocalDate fechaFin) {
         return ChronoUnit.DAYS.between(fechaInicio, fechaFin);
     }
@@ -118,18 +118,39 @@ public class Reserva {
         int cantidadPersonas = leerCantidadPersonasValida(read, gp, propiedadId);
         boolean pagado = false;
 
-        Reserva r = new Reserva(propiedadId, inquilinoId, fechaInicio, fechaFin, 
-                                precioFinal, cantidadPersonas, pagado);
-        
+        Reserva r = new Reserva(propiedadId, inquilinoId, fechaInicio, fechaFin,
+                precioFinal, cantidadPersonas, pagado);
+
         gr.agregarReserva(r);
+    }
+
+    public static void actualizarReserva(Scanner read, GestorReserva gr, GestorPropiedad gp, int id, int propiedadId, String dato) {
+        if (dato.equals("fecha")) {
+            LocalDate nuevaFechaInicio = Leer.leerFecha(read, "Nueva fecha inicio (YYYY-MM-DD): ");
+            LocalDate nuevaFechaFin = Reserva.esFechaValida(read, nuevaFechaInicio);
+
+            double precioNoche = gp.obtenerPrecioNoche(propiedadId);
+            if (precioNoche <= 0) {
+                System.out.println("Error: No se pudo obtener el precio por noche o es inválido. No se actualizó la reserva.");
+                return;
+            }
+
+            double precioFinal = Reserva.calcularPrecio(precioNoche, nuevaFechaInicio, nuevaFechaFin);
+
+            gr.actualizarReserva(id, nuevaFechaInicio, nuevaFechaFin, precioFinal);
+        } else {
+            int nuevaCant = Reserva.leerCantidadPersonasValida(read, gp, propiedadId);
+
+            gr.actualizarReserva(id, nuevaCant);
+        }
     }
 
     public static LocalDate esFechaValida(Scanner read, LocalDate fechaInicio) {
         LocalDate fechaFin = null;
-        
+
         while (fechaFin == null) {
             fechaFin = Leer.leerFecha(read, "Fecha fin (YYYY-MM-DD): ");
-            
+
             if (fechaFin != null && (fechaFin.isBefore(fechaInicio) || fechaFin.equals(fechaInicio))) {
                 System.out.println("La fecha de fin debe ser posterior a la fecha de inicio.");
                 fechaFin = null;
@@ -138,7 +159,7 @@ public class Reserva {
         return fechaFin;
     }
 
-    public static double calcularPrecio(double precioNoche, LocalDate fechaInicio, LocalDate fechaFin) { 
+    public static double calcularPrecio(double precioNoche, LocalDate fechaInicio, LocalDate fechaFin) {
         long noches = getDuracionReserva(fechaInicio, fechaFin);
         double precioFinal = precioNoche * noches;
         System.out.println("Precio final calculado: $" + String.format("%.2f", precioFinal));
@@ -149,11 +170,12 @@ public class Reserva {
         int capacidadMaxima = gp.obtenerMaxPersonas(idPropiedad);
         while (true) {
             int cantPersonas = Leer.leerIntPositivo(sc, "Cantidad de personas: ");
-            
+
             if (cantPersonas <= capacidadMaxima) {
-                return cantPersonas; 
+                return cantPersonas;
             } else {
-                System.out.println("Error: La cantidad de personas excede la capacidad máxima (" + capacidadMaxima + ").");
+                System.out.println(
+                        "Error: La cantidad de personas excede la capacidad máxima (" + capacidadMaxima + ").");
             }
         }
     }
