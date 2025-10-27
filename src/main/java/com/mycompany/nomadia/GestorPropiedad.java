@@ -22,8 +22,8 @@ public class GestorPropiedad {
             sentencia.setDouble(3, propiedad.getPrecioNoche());
             sentencia.setInt(4, propiedad.getAnfitrionId());
             sentencia.setInt(5, propiedad.getMaxPersonas());
-            sentencia.setObject(6, propiedad.getHabitaciones());
-            sentencia.setObject(7, propiedad.getBanios());
+            sentencia.setInt(6, propiedad.getHabitaciones());
+            sentencia.setInt(7, propiedad.getBanios());
             sentencia.setBoolean(8, propiedad.isParking());
             sentencia.setBoolean(9, propiedad.isPetFriendly());
             sentencia.setBoolean(10, propiedad.isParrilla());
@@ -49,8 +49,8 @@ public class GestorPropiedad {
             sentencia.setDouble(3, propiedad.getPrecioNoche());
             sentencia.setInt(4, propiedad.getAnfitrionId());
             sentencia.setInt(5, propiedad.getMaxPersonas());
-            sentencia.setObject(6, propiedad.getHabitaciones());
-            sentencia.setObject(7, propiedad.getBanios());
+            sentencia.setInt(6, propiedad.getHabitaciones());
+            sentencia.setInt(7, propiedad.getBanios());
             sentencia.setBoolean(8, propiedad.isParking());
             sentencia.setBoolean(9, propiedad.isPetFriendly());
             sentencia.setInt(10, propiedad.getPiso());
@@ -68,7 +68,7 @@ public class GestorPropiedad {
         String sql = """
                 INSERT INTO Propiedades (tipo, ubicacion, precioNoche, anfitrionId, maxPersonas, habitaciones, banios,
                                         parking, petFriendly, checkIn, checkOut, estrellas, piscina)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """;
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
             sentencia.setString(1, propiedad.getTipo());
@@ -76,8 +76,8 @@ public class GestorPropiedad {
             sentencia.setDouble(3, propiedad.getPrecioNoche());
             sentencia.setInt(4, propiedad.getAnfitrionId());
             sentencia.setInt(5, propiedad.getMaxPersonas());
-            sentencia.setObject(6, propiedad.getHabitaciones());
-            sentencia.setObject(7, propiedad.getBanios());
+            sentencia.setInt(6, propiedad.getHabitaciones());
+            sentencia.setInt(7, propiedad.getBanios());
             sentencia.setBoolean(8, propiedad.isParking());
             sentencia.setBoolean(9, propiedad.isPetFriendly());
             sentencia.setString(10, propiedad.getCheckIn());

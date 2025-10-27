@@ -125,7 +125,7 @@ public class GestorReserva {
 
     public void imprimirDatosReserva(ResultSet rs) {
         try {
-            System.out.println("=========== Reserva " + rs.getInt("id") + " ===========");
+            System.out.println("\n=========== Reserva " + rs.getInt("id") + " ===========");
             System.out.println("Propiedad ID: " + rs.getInt("propiedadId"));
             System.out.println("Inquilino ID: " + rs.getInt("inquilinoId"));
             System.out.println("Fecha Inicio: " + rs.getObject("fechaInicio"));
@@ -133,7 +133,7 @@ public class GestorReserva {
             System.out.println("Precio Final: $" + rs.getDouble("precioFinal"));
             System.out.println("Cantidad de Personas: " + rs.getInt("cantidadPersonas"));
             System.out.println("Pagado: " + (rs.getBoolean("pagado") ? "Sí" : "No"));
-            System.out.println("=================================\n");
+            System.out.println("=================================");
         } catch (SQLException e) {
             System.out.println("Error al imprimir datos de la reserva: " + e.getMessage());
         }
