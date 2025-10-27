@@ -92,12 +92,12 @@ public class GestorResenia {
 
     public void imprimirDatosResenia(ResultSet rs) {
         try {
-            System.out.println("=========== Reseña " + rs.getInt("id") + " ===========");
+            System.out.println("\n=========== Reseña " + rs.getInt("id") + " ===========");
             System.out.println("Propiedad ID: " + rs.getInt("propiedadId"));
             System.out.println("Inquilino ID: " + rs.getInt("inquilinoId"));
             System.out.println("Comentario: " + rs.getString("comentario"));
             System.out.println("Puntaje: " + rs.getInt("puntaje"));
-            System.out.println("=================================\n");
+            System.out.println("=================================");
         } catch (SQLException e) {
             System.out.println("Error al imprimir datos de la reseña: " + e.getMessage());
         }
