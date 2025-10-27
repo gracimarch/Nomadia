@@ -1,7 +1,6 @@
 package com.mycompany.nomadia;
 
 import java.util.Scanner;
-import java.util.ArrayList;
 
 public abstract class Propiedad {
     private int anfitrionId;
@@ -13,7 +12,6 @@ public abstract class Propiedad {
     private int maxPersonas;
     private boolean parking;
     private boolean petFriendly;
-    private ArrayList<Resenia> calificaciones;
 
     public Propiedad(int anfitrionId, String tipo, String ubicacion, double precioNoche, int habitaciones, int banios,
             int maxPersonas, boolean parking, boolean petFriendly) {
@@ -26,7 +24,6 @@ public abstract class Propiedad {
         this.maxPersonas = maxPersonas;
         this.parking = parking;
         this.petFriendly = petFriendly;
-        calificaciones = new ArrayList<>();
     }
 
     public int getAnfitrionId() {
@@ -99,14 +96,6 @@ public abstract class Propiedad {
 
     public void setPetFriendly(boolean petFriendly) {
         this.petFriendly = petFriendly;
-    }
-
-    public ArrayList<Resenia> getCalificaciones() {
-        return calificaciones;
-    }
-
-    public void setCalificaciones(ArrayList<Resenia> calificaciones) {
-        this.calificaciones = calificaciones;
     }
 
     public static void agregarPropiedad(Scanner read, GestorPropiedad gp, GestorUsuario gu, String tipoPropiedad) {
