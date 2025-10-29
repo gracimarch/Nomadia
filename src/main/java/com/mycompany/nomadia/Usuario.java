@@ -64,12 +64,29 @@ public abstract class Usuario {
         }
     }
 
-    public static void eliminarUsuario(Scanner read, GestorUsuario gu) {
+    public static void eliminarUsuario(Scanner read, GestorUsuario gu, GestorReserva gr) { // <-- Añadido GestorReserva
         int id = Leer.leerInt(read, "\nIngrese el ID del usuario que desea eliminar: ");
+
+        // 1. Verificar si el usuario existe
         if (!gu.existeUsuario(id)) {
-            System.out.println("No se encontró el usuario con el ID proporcionado.");
-        } else {
+            System.err.println("⚠️ No se encontró ningún usuario con el ID " + id + ".");
+            return;
+        }
+
+        try {
+            if (gu.esTipoUsuario(id, "Anfitrion")) {
+                if (gr.anfitrionTieneReservasActivas(id)) {
+                    throw new AnfitrionConReservasActivasException(
+                        "No se puede eliminar el Anfitrión ID " + id + ". Una o más de sus propiedades tienen reservas activas."
+                    );
+                }
+                System.out.println("Aviso: El Anfitrión tiene propiedades, pero ninguna con reservas activas. Procediendo...");
+            }
             gu.eliminarUsuario(id);
+
+        } catch (AnfitrionConReservasActivasException e) {
+            System.err.println("Error: " + e.getMessage());
+            System.out.println("(Debe eliminar las reservas de las propiedades de este anfitrión).");
         }
     }
 

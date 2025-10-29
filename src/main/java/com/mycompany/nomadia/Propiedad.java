@@ -151,9 +151,17 @@ public abstract class Propiedad {
     public static void eliminarPropiedad(Scanner read, GestorPropiedad gp) {
         int id = Leer.leerInt(read, "\nIngrese el ID de la Propiedad que desea eliminar: ");
         if (!gp.existePropiedad(id)) {
-            System.out.println("No se encontró la propiedad con el ID proporcionado.");
-        } else {
+            System.err.println("⚠️ No se encontró ninguna propiedad con el ID " + id + ".");
+            return;
+        }
+
+        try {
             gp.eliminarPropiedad(id);
+
+        } catch (AnfitrionConReservasActivasException e) {
+            System.err.println("Error: " + e.getMessage());
+            System.out.println("(Primero debe cancelar o eliminar las reservas asociadas a esta propiedad).");
+
         }
     }
     

@@ -33,7 +33,7 @@ public class GestorUsuario {
         }
     }
 
-    public void eliminarUsuario(int id) {
+    public void eliminarUsuario(int id) throws AnfitrionConReservasActivasException {
         String sql = "DELETE FROM Usuarios WHERE id = ?";
 
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
@@ -41,12 +41,19 @@ public class GestorUsuario {
             int registrosModificados = sentencia.executeUpdate();
 
             if (registrosModificados == 1) {
-                System.out.println("Usuario eliminado correctamente");
-            } else {
-                System.out.println("No se encontró el usuario con el ID proporcionado");
+                System.out.println("Usuario ID " + id + " eliminado correctamente de la base de datos.");
             }
+
         } catch (SQLException e) {
-            System.out.println("Error al eliminar usuario: " + e.getMessage());
+            String errorMessage = e.getMessage().toLowerCase();
+
+            if (errorMessage.contains("foreign key constraint failed")) {
+                throw new AnfitrionConReservasActivasException(
+                    "Error de BD: No se pudo eliminar el Anfitrión ID " + id + " porque aún tiene propiedades asociadas (aunque no tengan reservas)."
+                );
+            } else {
+                System.err.println("Error al intentar eliminar usuario ID " + id + ": " + e.getMessage());
+            }
         }
     }
 
