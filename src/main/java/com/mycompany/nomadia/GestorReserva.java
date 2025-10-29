@@ -191,4 +191,24 @@ public class GestorReserva {
             return false;
         }
     }
+
+    public boolean anfitrionTieneReservasActivas(int anfitrionId) {
+        // Consulta SQL que une Propiedades y Reservas para el anfitrión dado
+        String sql = """
+            SELECT 1 FROM Propiedades p
+            JOIN Reservas r ON p.id = r.propiedadId
+            WHERE p.anfitrionId = ?
+            LIMIT 1
+        """;
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, anfitrionId);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al verificar reservas activas para el anfitrión: " + e.getMessage());
+            return true;
+        }
+    }
 }

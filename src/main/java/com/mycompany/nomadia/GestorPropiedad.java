@@ -92,7 +92,7 @@ public class GestorPropiedad {
         }
     }
 
-    public void eliminarPropiedad(int id) {
+    public void eliminarPropiedad(int id) throws AnfitrionConReservasActivasException {
         String sql = "DELETE FROM Propiedades WHERE id = ?";
 
         try (PreparedStatement sentencia = conn.prepareStatement(sql)) {
@@ -101,11 +101,15 @@ public class GestorPropiedad {
 
             if (registrosModificados == 1) {
                 System.out.println("Propiedad eliminada correctamente");
-            } else {
-                System.out.println("No se encontró la propiedad con el ID proporcionado");
             }
         } catch (SQLException e) {
-            System.out.println("Error al eliminar propiedad: " + e.getMessage());
+            if (e.getMessage().toLowerCase().contains("foreign key constraint failed")) {
+                // 3. Lanza tu excepción de negocio específica
+                throw new AnfitrionConReservasActivasException(
+                    "No se puede eliminar la propiedad ID " + id + ". Tiene reservas activas asociadas."
+                );
+            }
+            System.err.println("Error al eliminar propiedad: " + e.getMessage());
         }
     }
 

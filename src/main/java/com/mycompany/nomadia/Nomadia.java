@@ -141,7 +141,7 @@ public class Nomadia {
                                 break;
 
                             case 3:
-                                Usuario.eliminarUsuario(read, gestorUsuario);
+                                Usuario.eliminarUsuario(read, gestorUsuario, gestorReserva);
                                 break;
 
                             case 4:
