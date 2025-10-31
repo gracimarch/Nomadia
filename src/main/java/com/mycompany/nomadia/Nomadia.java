@@ -2,7 +2,6 @@ package com.mycompany.nomadia;
 
 import java.sql.*;
 import java.util.Scanner;
-import java.time.LocalDate;
 
 public class Nomadia {
     public static void main(String[] args) {
@@ -511,7 +510,15 @@ public class Nomadia {
                                     break;
                                 }
 
+                                int inquilinoId = reservaAPagar.getInquilinoId();
                                 double monto = reservaAPagar.getPrecioFinal();
+
+                                Inquilino inquilino = (Inquilino) gestorUsuario.obtenerUsuarioPorId(inquilinoId);
+
+                                double descuento = inquilino.obtenerDescuento();
+
+                                monto = monto - (monto * descuento);
+                                
                                 System.out.println("El monto total a pagar es: $" + String.format("%.2f", monto));
                                 
                                 System.out.println("Seleccione el método de pago:");

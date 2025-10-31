@@ -213,4 +213,31 @@ public class GestorUsuario {
         return tipo;
     }
 
+    public Usuario obtenerUsuarioPorId(int id) {
+        try {
+            String sql = "SELECT * FROM usuarios WHERE id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                String tipo = rs.getString("tipo");
+                String nombre = rs.getString("nombre");
+                String email = rs.getString("email");
+                String telefono = rs.getString("telefono");
+
+                if ("InquilinoPremium".equals(tipo)) {
+                    return new InquilinoPremium(nombre, email, telefono);
+                } else if ("Inquilino".equals(tipo)) {
+                    return new Inquilino(nombre, email, telefono);
+                } else if ("Anfitrion".equals(tipo)) {
+                    return new Anfitrion(nombre, email, telefono);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al obtener usuario: " + e.getMessage());
+        }
+        return null;
+    }
+
 }
