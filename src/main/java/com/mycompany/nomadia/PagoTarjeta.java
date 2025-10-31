@@ -16,8 +16,9 @@ public class PagoTarjeta implements Pago {
             System.out.println("Cuotas inválidas. Sólo se permiten 3 o 6.");
         }
 
-        double valorCuota = monto / cuotas + (0.1 * monto);
-        System.out.println("Procesando pago con tarjeta por: $" + String.format("%.2f", monto));
+        double montoConInteres = monto + (0.1 * monto);
+        double valorCuota = montoConInteres / cuotas;
+        System.out.println("Procesando pago con tarjeta por: $" + String.format("%.2f", montoConInteres));
         System.out.println("Plan de pago: " + cuotas + " cuotas de $" + String.format("%.2f", valorCuota));
 
         try {

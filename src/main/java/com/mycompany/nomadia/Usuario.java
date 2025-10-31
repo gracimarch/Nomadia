@@ -67,7 +67,6 @@ public abstract class Usuario {
     public static void eliminarUsuario(Scanner read, GestorUsuario gu, GestorReserva gr) { // <-- Añadido GestorReserva
         int id = Leer.leerInt(read, "\nIngrese el ID del usuario que desea eliminar: ");
 
-        // 1. Verificar si el usuario existe
         if (!gu.existeUsuario(id)) {
             System.err.println("⚠️ No se encontró ningún usuario con el ID " + id + ".");
             return;
@@ -97,4 +96,5 @@ public abstract class Usuario {
         String nuevo = read.nextLine();
         gu.actualizarUsuario(idActualizar, dato, nuevo);
     }
+    
 }

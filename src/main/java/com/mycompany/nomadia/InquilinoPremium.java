@@ -11,4 +11,10 @@ public class InquilinoPremium extends Inquilino {
     public double getDescuento() {
         return DESCUENTO;
     }
+
+    @Override
+    public double obtenerDescuento() {
+        System.out.println("El inquilino premium tiene un descuento del " + (DESCUENTO * 100) + "% en reservas.");
+        return DESCUENTO;
+    }
 }
