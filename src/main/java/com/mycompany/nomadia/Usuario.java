@@ -64,11 +64,11 @@ public abstract class Usuario {
         }
     }
 
-    public static void eliminarUsuario(Scanner read, GestorUsuario gu, GestorReserva gr) { // <-- Añadido GestorReserva
+    public static void eliminarUsuario(Scanner read, GestorUsuario gu, GestorReserva gr) {
         int id = Leer.leerInt(read, "\nIngrese el ID del usuario que desea eliminar: ");
 
         if (!gu.existeUsuario(id)) {
-            System.err.println("⚠️ No se encontró ningún usuario con el ID " + id + ".");
+            System.err.println("No se encontró ningún usuario con el ID " + id + ".");
             return;
         }
 

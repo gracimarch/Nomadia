@@ -151,10 +151,9 @@ public abstract class Propiedad {
     public static void eliminarPropiedad(Scanner read, GestorPropiedad gp) {
         int id = Leer.leerInt(read, "\nIngrese el ID de la Propiedad que desea eliminar: ");
         if (!gp.existePropiedad(id)) {
-            System.err.println("⚠️ No se encontró ninguna propiedad con el ID " + id + ".");
+            System.err.println("No se encontró ninguna propiedad con el ID " + id + ".");
             return;
         }
-
         try {
             gp.eliminarPropiedad(id);
 
