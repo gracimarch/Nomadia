@@ -351,7 +351,7 @@ public class GestorPropiedad {
             System.out.println("Anfitrión ID: " + rs.getInt("anfitrionId"));
             System.out.println("Máx. Personas: " + rs.getInt("maxPersonas"));
 
-            /* Campos opcionales */
+            /* campos opcionales */
             int habitaciones = rs.getInt("habitaciones");
             if (!rs.wasNull())
                 System.out.println("Habitaciones: " + habitaciones);

@@ -51,15 +51,13 @@ public class Resenia {
         System.out.println("\n== Agregar Reseña ==");
         int propiedadId = Leer.leerInt(read, "Propiedad ID: ");
         if (!gp.existePropiedad(propiedadId)) {
-            System.out.println(
-                    "No se encontró la propiedad con el ID proporcionado. Volviendo al menú de reseñas.");
+            System.out.println("No se encontró la propiedad con el ID proporcionado. Volviendo al menú de reseñas.");
             return;
         }
 
         int inquilinoId = Leer.leerInt(read, "Inquilino ID: ");
         if (!gu.existeUsuario(inquilinoId)) {
-            System.out.println(
-                    "No se encontró el usuario con el ID proporcionado. Volviendo al menú de reseñas.");
+            System.out.println("No se encontró el usuario con el ID proporcionado. Volviendo al menú de reseñas.");
             return;
         }
         if (gu.esTipoUsuario(inquilinoId, "Anfitrion")) {
@@ -84,5 +82,4 @@ public class Resenia {
             gr.eliminarResenia(id);
         }
     }
-
 }

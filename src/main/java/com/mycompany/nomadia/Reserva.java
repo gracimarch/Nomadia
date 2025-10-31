@@ -174,8 +174,7 @@ public class Reserva {
             if (cantPersonas <= capacidadMaxima) {
                 return cantPersonas;
             } else {
-                System.out.println(
-                        "Error: La cantidad de personas excede la capacidad máxima (" + capacidadMaxima + ").");
+                System.out.println("Error: La cantidad de personas excede la capacidad máxima (" + capacidadMaxima + ").");
             }
         }
     }
