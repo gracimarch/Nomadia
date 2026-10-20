@@ -1,4 +1,4 @@
-package com.mycompany.nomadia;
+package nomadia;
 
 public class Hotel extends Propiedad {
     private String checkIn;

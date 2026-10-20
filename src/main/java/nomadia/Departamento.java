@@ -1,4 +1,4 @@
-package com.mycompany.nomadia;
+package nomadia;
 
 public class Departamento extends Propiedad {
     private int piso;

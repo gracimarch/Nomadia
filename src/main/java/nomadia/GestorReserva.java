@@ -1,4 +1,4 @@
-package com.mycompany.nomadia;
+package nomadia;
 
 import java.sql.*;
 import java.time.LocalDate;

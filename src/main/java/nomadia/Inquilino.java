@@ -1,4 +1,4 @@
-package com.mycompany.nomadia;
+package nomadia;
 
 public class Inquilino extends Usuario {
     

@@ -1,4 +1,4 @@
-package com.mycompany.nomadia;
+package nomadia;
 
 public class InquilinoPremium extends Inquilino {
     private static final double DESCUENTO = 0.2;

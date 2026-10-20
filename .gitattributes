@@ -1,0 +1,19 @@
+# Detección automática de archivos de texto
+* text=auto
+
+# Archivos binarios (proteger de conversiones de fin de línea)
+*.db binary
+*.jar binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.ico binary
+
+# Archivos de código fuente y configuración
+*.java text eol=native
+*.xml text eol=native
+*.md text eol=native
+*.sql text eol=native
+*.properties text eol=native
+.gitignore text eol=native
+.gitattributes text eol=native

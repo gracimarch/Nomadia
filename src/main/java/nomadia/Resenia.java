@@ -1,4 +1,4 @@
-package com.mycompany.nomadia;
+package nomadia;
 
 import java.util.Scanner;
 
