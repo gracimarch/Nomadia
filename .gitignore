@@ -23,3 +23,12 @@
 hs_err_pid*
 replay_pid*
 /target/
+
+# IDEs y editores
+.vscode/
+.idea/
+*.iml
+.project
+.classpath
+.settings/
+nbproject/private/
